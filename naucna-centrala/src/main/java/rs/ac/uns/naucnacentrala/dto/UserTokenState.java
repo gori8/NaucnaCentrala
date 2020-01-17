@@ -1,4 +1,4 @@
-package rs.ac.uns.naucnacentrala.model;
+package rs.ac.uns.naucnacentrala.dto;
 
 public class UserTokenState {
 	

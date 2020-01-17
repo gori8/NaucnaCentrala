@@ -5,6 +5,7 @@ import org.camunda.bpm.engine.form.FormField;
 import java.util.List;
 
 public class FormFieldsDto {
+
 	String taskId;
 	List<FormField> formFields;
 	String processInstanceId;
@@ -18,7 +19,6 @@ public class FormFieldsDto {
 
 	public FormFieldsDto() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getTaskId() {

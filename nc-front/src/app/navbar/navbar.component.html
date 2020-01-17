@@ -1,0 +1,10 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+      <a class="navbar-brand clicker" routerLink="register" *ngIf="!(currentUser$ | async)">Register</a> 
+      <a class="navbar-brand clicker" routerLink="login" *ngIf="!(currentUser$ | async)">Login</a>
+      <a class="navbar-brand clicker" (click)="newJournal()" *ngIf="(currentUser$ | async)?.role=='ROLE_UREDNIK'">Add New Journal</a>
+      <a class="navbar-brand clicker" routerLink="admin/journals" *ngIf="(currentUser$ | async)?.role=='ROLE_ADMIN'">Activate Journals</a>
+      <a class="navbar-brand clicker" routerLink="admin/users" *ngIf="(currentUser$ | async)?.role=='ROLE_ADMIN'">Activate Reviewers</a>
+      <a class="navbar-brand clicker" routerLink="urednik/journals" *ngIf="(currentUser$ | async)?.role=='ROLE_UREDNIK'">My Journals</a>
+      <a class="navbar-brand clicker" routerLink="admin/register/urednik" *ngIf="(currentUser$ | async)?.role=='ROLE_ADMIN'">Register New Editors</a>
+      <a class="navbar-brand clicker" (click)="logout()" *ngIf="(currentUser$ | async)">Logout</a>
+</nav>

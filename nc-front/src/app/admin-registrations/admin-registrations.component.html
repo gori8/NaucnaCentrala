@@ -1,0 +1,14 @@
+<div *ngFor="let user of users">
+  <div class="card text-center" style="width: 21.5em;margin:0 auto;">
+  <div class="card-header">
+    Korisnik
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">{{user.username}}</h5>
+    <p class="card-text">Ime: {{user.ime}}</p>
+    <p class="card-text">Prezime: {{user.prezime}}</p>
+    <button  class="btn btn-success" (click)="onClick(user.taskId,true)">Accept</button>
+    <button  class="btn btn-danger" (click)="onClick(user.taskId,false)">Reject</button>
+  </div>
+</div>
+</div>

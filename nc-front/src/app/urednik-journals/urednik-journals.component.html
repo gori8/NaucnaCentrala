@@ -1,0 +1,12 @@
+<div *ngFor="let casopis of casopisi">
+  <div class="card text-center" style="width: 21.5em;margin:0 auto;">
+  <div class="card-header">
+    Časopis
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">{{casopis.naziv}}</h5>
+    <p class="card-text">Issn: {{casopis.issn}}</p>
+    <button  class="btn btn-primary" (click)="onClick(casopis.processInstanceId)" *ngIf="casopis.casopisStatus=='WAITING_FOR_INPUT'">Activate</button>
+  </div>
+</div>
+</div>

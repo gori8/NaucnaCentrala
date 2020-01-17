@@ -24,6 +24,10 @@ import rs.ac.uns.naucnacentrala.security.auth.RestAuthenticationEntryPoint;
 import rs.ac.uns.naucnacentrala.security.auth.TokenAuthenticationFilter;
 import rs.ac.uns.naucnacentrala.service.CustomUserDetailsService;
 
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
 
 @Configuration
 @EnableWebSecurity
@@ -71,7 +75,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 			.authorizeRequests()
 				.antMatchers("/auth/**").permitAll()
-			.anyRequest().authenticated().and()
+				.antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+			.antMatchers("/restapi/**").authenticated().and()
 			// presretni svaki zahtev filterom
 			.addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService), BasicAuthenticationFilter.class);
 
@@ -82,8 +87,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		// TokenAuthenticationFilter ce ignorisati sve ispod navedene putanje
-		web.ignoring().antMatchers(HttpMethod.GET, "/**");
-		web.ignoring().antMatchers(HttpMethod.POST, "/**");
+		web.ignoring().antMatchers(HttpMethod.GET, "/restapi/registration/**");
+		web.ignoring().antMatchers(HttpMethod.POST, "/restapi/bpmn/form/**","/restapi/auth/**");
 	}
 
 	@Bean
@@ -103,5 +108,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		source.registerCorsConfiguration("/**", config);
 		return new CorsFilter(source);
 	}
+
+
 
 }

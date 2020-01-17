@@ -1,10 +1,14 @@
 package rs.ac.uns.naucnacentrala.service;
 
+import org.camunda.bpm.engine.IdentityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import rs.ac.uns.naucnacentrala.dto.UserDTO;
+import rs.ac.uns.naucnacentrala.dto.LoginResponseDTO;
+import rs.ac.uns.naucnacentrala.dto.UserCredentialsDTO;
+import rs.ac.uns.naucnacentrala.dto.UserTokenState;
 import rs.ac.uns.naucnacentrala.model.Authority;
 import rs.ac.uns.naucnacentrala.model.User;
 import rs.ac.uns.naucnacentrala.repository.AuthorityRepository;
@@ -13,7 +17,6 @@ import rs.ac.uns.naucnacentrala.security.TokenUtils;
 import rs.ac.uns.naucnacentrala.security.auth.JwtAuthenticationRequest;
 import rs.ac.uns.naucnacentrala.utils.ObjectMapperUtils;
 
-import javax.persistence.RollbackException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +35,11 @@ public class LoginServiceImpl implements  LoginService{
     AuthorityRepository authorityRepository;
 
     @Autowired
-    public PasswordEncoder passwordEncoder;
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
+    IdentityService identityService;
+
 
     @Override
     public User checkCredentials(JwtAuthenticationRequest request) {
@@ -46,42 +53,37 @@ public class LoginServiceImpl implements  LoginService{
     }
 
 
-
-    public UserDTO register(UserDTO userDTO) throws RollbackException {
-        User user = new User();
-
-        if(userRepository.findByUsername(userDTO.getUsername()) != null){
-            return userDTO;
-        }
-
-        user.setPrezime(userDTO.getPrezime());
-        user.setEnabled(true);
-        user.setIme(userDTO.getIme());
-        user.setUsername(userDTO.getUsername());
-        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        user.setEmail(userDTO.getEmail());
-        Authority authority = authorityRepository.findOneByName("ROLE_USER");
+    @Override
+    public boolean register(User user, String role) throws Exception{
+        Authority authority = authorityRepository.findOneByName(role);
         List<Authority> authorities = new ArrayList<>();
         authorities.add(authority);
         user.setAuthorities(authorities);
-
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user = userRepository.save(user);
+        org.camunda.bpm.engine.identity.User userCamunda=identityService.newUser(user.getUsername());
+        userCamunda.setEmail(user.getEmail());
+        userCamunda.setFirstName(user.getIme());
+        userCamunda.setLastName(user.getPrezime());
+        userCamunda.setPassword(user.getPassword());
+        identityService.saveUser(userCamunda);
+        String processedRole=processRoleString(role).toLowerCase();
+        identityService.createMembership(userCamunda.getId(),processedRole);
 
-        return userDTO;
+
+        return true;
     }
 
     @Override
-    public UserDTO login(JwtAuthenticationRequest request) {
+    public LoginResponseDTO login(JwtAuthenticationRequest request) {
         User user=userRepository.findByUsername(request.getUsername());
         if(user!=null){
-            if(passwordEncoder.matches(request.getPassword(),user.getPassword())){
+            if(passwordEncoder.matches(request.getPassword(),user.getPassword())&&user.isEnabled()){
                 String jwt = tokenUtils.generateToken(request.getUsername());
-                int expiresIn = tokenUtils.getExpiredIn();
-                UserDTO userDTO= ObjectMapperUtils.map(user,UserDTO.class);
-                userDTO.setExpiresIn(expiresIn);
-                userDTO.setToken(jwt);
+                long expiresIn = tokenUtils.getExpiredIn();
+                LoginResponseDTO token=new LoginResponseDTO(jwt,expiresIn,user.getUsername(),((Authority)user.getAuthorities().toArray()[0]).getName());
                 // Vrati user-a sa tokenom kao odgovor na uspesnu autentifikaciju
-                return userDTO;
+                return token;
             }
         }
         return null;
@@ -99,20 +101,23 @@ public class LoginServiceImpl implements  LoginService{
     }
 
     @Override
-    public UserDTO refreshAuthenticationToken(HttpServletRequest request){
+    public UserTokenState refreshAuthenticationToken(HttpServletRequest request){
         String token = tokenUtils.getToken(request);
         String username = this.tokenUtils.getUsernameFromToken(token);
         User user = (User) userRepository.findByUsername(username);
-        if (this.tokenUtils.canTokenBeRefreshed(token, user.getLastPasswordResetDate())) {
+        if (this.tokenUtils.canTokenBeRefreshed(token, user.getLastSifraResetDate())) {
             String refreshedToken = tokenUtils.refreshToken(token);
-            int expiresIn = tokenUtils.getExpiredIn();
-            UserDTO userDTO= ObjectMapperUtils.map(user,UserDTO.class);
-            userDTO.setExpiresIn(expiresIn);
-            userDTO.setToken(refreshedToken);
-            return userDTO;
+            long expiresIn = tokenUtils.getExpiredIn();
+            UserTokenState newToken=new UserTokenState(refreshedToken,expiresIn);
+            // Vrati user-a sa tokenom kao odgovor na uspesnu autentifikaciju
+            return newToken;
         } else {
             return null;
         }
+    }
+
+    private String processRoleString(String s){
+        return s.replace("ROLE_","");
     }
 
 }

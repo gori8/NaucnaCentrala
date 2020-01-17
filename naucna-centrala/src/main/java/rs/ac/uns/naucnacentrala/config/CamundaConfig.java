@@ -1,8 +1,5 @@
 package rs.ac.uns.naucnacentrala.config;
 
-import org.camunda.bpm.engine.*;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration;
 import org.camunda.bpm.engine.impl.form.type.AbstractFormFieldType;
 import org.camunda.bpm.engine.spring.ProcessEngineFactoryBean;
 import org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration;
@@ -12,13 +9,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.transaction.PlatformTransactionManager;
-import rs.ac.uns.naucnacentrala.camunda.types.MultiSelectionFormType;
+import rs.ac.uns.naucnacentrala.camunda.types.NacinPlacanjaMultiSelectionFormType;
+import rs.ac.uns.naucnacentrala.camunda.types.NaucneOblastiMultiSelectionFormType;
+import rs.ac.uns.naucnacentrala.camunda.types.RecezentiMultiSelectionFormType;
+import rs.ac.uns.naucnacentrala.camunda.types.UredniciMultiSelectionFormType;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -53,7 +50,10 @@ public class CamundaConfig {
         if(config.getCustomFormTypes()==null){
             config.setCustomFormTypes(new ArrayList<AbstractFormFieldType>());
         }
-        config.getCustomFormTypes().add(new MultiSelectionFormType());
+        config.getCustomFormTypes().add(new NacinPlacanjaMultiSelectionFormType());
+        config.getCustomFormTypes().add(new NaucneOblastiMultiSelectionFormType());
+        config.getCustomFormTypes().add(new RecezentiMultiSelectionFormType());
+        config.getCustomFormTypes().add(new UredniciMultiSelectionFormType());
 
         config.setDeploymentResources(resourceLoader.getResources("classpath:/processes/*.bpmn"));
 

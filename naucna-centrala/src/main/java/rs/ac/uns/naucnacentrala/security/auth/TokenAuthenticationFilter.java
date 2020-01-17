@@ -1,6 +1,8 @@
 package rs.ac.uns.naucnacentrala.security.auth;
 
 
+import org.camunda.bpm.engine.IdentityService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,6 +18,7 @@ import java.io.IOException;
 //Filter koji ce presretati svaki zahtev klijenta ka serveru
 //Sem nad putanjama navedenim u WebSecurityConfig.configure(WebSecurity web)
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
+
 
 	private TokenUtils tokenUtils;
 

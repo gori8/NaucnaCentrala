@@ -7,15 +7,16 @@ import org.camunda.bpm.engine.impl.form.type.AbstractFormFieldType;
 import org.camunda.bpm.engine.variable.Variables;
 import org.camunda.bpm.engine.variable.value.TypedValue;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @NoArgsConstructor
-public class MultiSelectionFormType extends AbstractFormFieldType {
+public class UredniciMultiSelectionFormType extends AbstractFormFieldType {
 
-    public static final String TYPE_NAME = "multi-select";
-    protected Map<String, String> values;
+    public static final String TYPE_NAME = "urednici-multi-select";
+    protected Map<Long, String> values=new HashMap<>();
 
-    public MultiSelectionFormType(Map<String, String> values) {
+    public UredniciMultiSelectionFormType(Map<Long, String> values) {
         this.values = values;
     }
 
@@ -29,7 +30,7 @@ public class MultiSelectionFormType extends AbstractFormFieldType {
     }
 
 
-    public Map<String, String> getValues() {
+    public Map<Long, String> getValues() {
         return this.values;
     }
 

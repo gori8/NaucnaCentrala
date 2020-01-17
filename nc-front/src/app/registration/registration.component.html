@@ -1,0 +1,34 @@
+<div>
+<form #f="ngForm" (ngSubmit)="onSubmit(f.value, f)" ngNativeValidate>
+
+  <div *ngFor="let field of formFields" >
+      <label for={{field.id}}>{{field.label}}</label>
+
+      <input type="text" name={{field.id}} [(ngModel)]="field.value.value"  *ngIf="field.type.name=='string'" [ngClass]="{'invalidField': field.err==true}">
+      <input type="checkbox" name={{field.id}} [(ngModel)]="field.value.value"  *ngIf="field.type.name=='boolean'" [ngClass]="{'invalidField': field.err==true}">
+      <input type="number" name={{field.id}} [(ngModel)]="field.value.value"  *ngIf="field.type.name=='long'" [ngClass]="{'invalidField': field.err==true}">
+      <select name="{{field.id}}" [(ngModel)]="field.value.value" *ngIf="field.type.name=='enum'">
+        <option *ngFor="let val of enumValues" value={{val}}>
+          {{field.type.values[val]}}
+        </option>
+      </select>
+      <ng-multiselect-dropdown
+        [placeholder]="'custom placeholder'"
+        [data]="multiselectList[field.id]"
+        [(ngModel)]="selectedItems[field.id]"
+        [settings]="dropdownSettings"
+        (onSelect)="onItemSelect($event)"
+        (onSelectAll)="onSelectAll($event)"
+        *ngIf="field.type.name.includes('multi-select')"
+        name={{field.id}}
+      >
+      </ng-multiselect-dropdown>
+      <div *ngIf="field.err">
+        {{field.errMsg}}
+      </div>
+  </div>
+  
+  <input type="submit">
+</form>
+</div>
+
