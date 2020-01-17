@@ -1,33 +1,50 @@
-<div>
-<form #f="ngForm" (ngSubmit)="onSubmit(f.value, f)" ngNativeValidate>
+<section id="cover" class="min-vh-100">
+    <div id="cover-caption">
+        <div class="container">
+            <div class="row text-blue">
+                <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto text-center form p-4">
+                    <h1 class="display-4 py-2 text-truncate">Journal</h1>
+                    <div class="px-2">
+                        <form #f="ngForm" (ngSubmit)="onSubmit(f.value, f)" ngNativeValidate>
+                          <div *ngFor="let field of formFields"  class="form-group">
+                            
+                              <label for={{field.id}}>{{field.label}}</label>
+                             
+                                <input type="text" name={{field.id}} [(ngModel)]="field.value.value"  *ngIf="field.type.name=='string'" class="form-control" id="{{field.id}}">
+                                <input type="checkbox" name={{field.id}} [(ngModel)]="field.value.value"  *ngIf="field.type.name=='boolean'" class="form-control" id="{{field.id}}">
+                                <input type="number" name={{field.id}} [(ngModel)]="field.value.value"  *ngIf="field.type.name=='long'" class="form-control" id="{{field.id}}">
+                                <select name="{{field.id}}" [(ngModel)]="field.value.value" *ngIf="field.type.name=='enum'" class="form-control" id="{{field.id}}">
+                                  <option *ngFor="let val of enumValues" value={{val}}>
+                                    {{field.type.values[val]}}
+                                  </option>
+                                </select>
+                                <ng-multiselect-dropdown
+                                  [placeholder]="Izaberi"
+                                  [data]="multiselectList[field.id]"
+                                  [(ngModel)]="selectedItems[field.id]"
+                                  [settings]="dropdownSettings"
+                                  (onSelect)="onItemSelect($event)"
+                                  (onSelectAll)="onSelectAll($event)"
+                                  *ngIf="field.type.name.includes('multi-select')"
+                                  name={{field.id}}
+                                  id="{{field.id}}"
+                                >
+                                </ng-multiselect-dropdown>
+                              
+                              <div class="text-danger">
+                                {{field.errMsg}}
+                              </div>
+                          </div>
+                          <input type="submit" class="btn btn-primary">
+                        </form>
+                      </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-  <div *ngFor="let field of formFields" >
-      <label for={{field.id}}>{{field.label}}</label>
 
-      <input type="text" name={{field.id}} [(ngModel)]="field.value.value"  *ngIf="field.type.name=='string'" [ngClass]="{'invalidField': field.err==true}">
-      <input type="checkbox" name={{field.id}} [(ngModel)]="field.value.value"  *ngIf="field.type.name=='boolean'" [ngClass]="{'invalidField': field.err==true}">
-      <input type="number" name={{field.id}} [(ngModel)]="field.value.value"  *ngIf="field.type.name=='long'" [ngClass]="{'invalidField': field.err==true}">
-      <select name="{{field.id}}" [(ngModel)]="field.value.value" *ngIf="field.type.name=='enum'">
-        <option *ngFor="let val of enumValues" value={{val}}>
-          {{field.type.values[val]}}
-        </option>
-      </select>
-      <ng-multiselect-dropdown
-        [placeholder]="'custom placeholder'"
-        [data]="multiselectList[field.id]"
-        [(ngModel)]="selectedItems[field.id]"
-        [settings]="dropdownSettings"
-        (onSelect)="onItemSelect($event)"
-        (onSelectAll)="onSelectAll($event)"
-        *ngIf="field.type.name.includes('multi-select')"
-        name={{field.id}}
-      >
-      </ng-multiselect-dropdown>
-      <div *ngIf="field.err">
-        {{field.errMsg}}
-      </div>
-  </div>
-  
-  <input type="submit">
-</form>
-</div>
+
+
+

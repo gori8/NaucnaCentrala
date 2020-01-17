@@ -10,10 +10,12 @@ import { AdminJournalsComponent } from './admin-journals/admin-journals.componen
 import { AdminRegistrationsComponent } from './admin-registrations/admin-registrations.component';
 import { UrednikJournalsComponent } from './urednik-journals/urednik-journals.component';
 import { UrednikRegisterComponent } from './urednik-register/urednik-register.component';
+import { SuccessPageComponent } from './success-page/success-page.component';
 
 
 const routes: Routes = [
 	{ path: '', component: HomeComponent },
+  { path: 'reg/success', component: SuccessPageComponent },
 	{ path: 'journal/activate/:processInstanceID', component: ActivateJournalComponent, canActivate: [AuthGuard] },
 	{ path: 'journal/add', component: AddJournalComponent, canActivate: [AuthGuard] },
   { path: 'urednik/journals', component: UrednikJournalsComponent, canActivate: [AuthGuard] },

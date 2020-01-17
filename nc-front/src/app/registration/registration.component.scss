@@ -1,3 +1,17 @@
 .invalidField {
 	border: 1px solid red;
 }
+
+#cover {
+    height: 100%;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+#cover-caption {
+    width: 100%;
+    position: relative;
+    z-index: 1;
+}

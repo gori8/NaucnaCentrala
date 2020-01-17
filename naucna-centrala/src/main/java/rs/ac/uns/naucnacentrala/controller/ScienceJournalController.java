@@ -33,7 +33,7 @@ public class ScienceJournalController {
     CasopisRepository casopisRepository;
 
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('UREDNIK')")
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<FormFieldsDto> startProcess(){
 
@@ -42,7 +42,7 @@ public class ScienceJournalController {
         return new ResponseEntity<>(camundaUtils.createFormDTO(task,task.getProcessInstanceId()), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('UREDNIK')")
     @RequestMapping(method = RequestMethod.GET, value = "/mine")
     public ResponseEntity getAllMine(){
         String username = SecurityContextHolder.getContext().getAuthentication().getName();

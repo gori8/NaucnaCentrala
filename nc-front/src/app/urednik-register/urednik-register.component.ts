@@ -4,6 +4,8 @@ import { RegistrationService } from '../_services/registration/registration.serv
 import { BpmnService } from '../_services/bpmn/bpmn.service';
 import { ScienceJournalService } from '../_services/science-journal/science-journal.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+
 
 @Component({
   selector: 'app-urednik-register',
@@ -13,7 +15,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class UrednikRegisterComponent implements OnInit {
 
 
-   constructor(private registrationService : RegistrationService, private bpmnService : BpmnService, private router : Router, private route : ActivatedRoute) { }
+   constructor(private registrationService : RegistrationService, private bpmnService : BpmnService, private router : Router, private route : ActivatedRoute,private toastr : ToastrService) { }
 
   private formFieldsDto = null;
   private formFields = [];
@@ -107,12 +109,11 @@ export class UrednikRegisterComponent implements OnInit {
 
     x.subscribe(
       res => {
-        alert("Please confirm your mail via email");
-        this.router.navigate['stagod'];
+         this.toastr.success("Please confrim your registration via email");
+        this.router.navigate(['stagod']);
       },
       err => {
-            alert("VISE SRECE DRUGI PUT");
-              console.log(err);
+            console.log(err);
               this.formFieldsDto.taskId=err.error["taskID"];
               let map=new Map(Object.entries(err.error));
               map.delete("taskID");

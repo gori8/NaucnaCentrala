@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ScienceJournalService } from '../_services/science-journal/science-journal.service';
 import { BpmnService } from '../_services/bpmn/bpmn.service';
+import { ToastrService } from 'ngx-toastr';
+
 
 @Component({
   selector: 'app-admin-journals',
@@ -11,7 +13,7 @@ export class AdminJournalsComponent implements OnInit {
 
 	private casopisi;
 
-  constructor(private scienceJournalService : ScienceJournalService, private bpmnService : BpmnService) { }
+  constructor(private scienceJournalService : ScienceJournalService, private bpmnService : BpmnService,private toastr : ToastrService) { }
 
   ngOnInit() {
   	this.scienceJournalService.getNonActivatedJournals().subscribe(
@@ -29,10 +31,12 @@ export class AdminJournalsComponent implements OnInit {
     dtos.push({fieldId : "potvrda_admina", fieldValue : flag});
     this.bpmnService.postProtectedFormData(taskID,dtos).subscribe(
         res => {
-          alert("USPEH!");
+          this.toastr.success("Accepted successfully")
+          this.ngOnInit();
         },
         err => {
-          alert("VISE SRECE DRUGI PUT");
+          console.log(err);
+          alert("Error Occured!");
         }
       );
   }

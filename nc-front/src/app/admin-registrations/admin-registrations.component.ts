@@ -30,10 +30,11 @@ export class AdminRegistrationsComponent implements OnInit {
     dtos.push({fieldId : "potvrdi_recezent", fieldValue : flag});
     this.bpmnService.postProtectedFormData(taskID,dtos).subscribe(
         res => {
-          alert("USPEH!");
+          this.ngOnInit();
         },
         err => {
-          alert("VISE SRECE DRUGI PUT");
+          console.log(err);
+          alert("Error Occured!");
         }
       );
   }

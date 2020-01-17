@@ -17,6 +17,8 @@ import { AdminJournalsComponent } from './admin-journals/admin-journals.componen
 import { AdminRegistrationsComponent } from './admin-registrations/admin-registrations.component';
 import { UrednikJournalsComponent } from './urednik-journals/urednik-journals.component';
 import { UrednikRegisterComponent } from './urednik-register/urednik-register.component';
+import { SuccessPageComponent } from './success-page/success-page.component';
+import { ToastrModule } from 'ngx-toastr';
 
 
 
@@ -33,7 +35,8 @@ import { UrednikRegisterComponent } from './urednik-register/urednik-register.co
     AdminJournalsComponent,
     AdminRegistrationsComponent,
     UrednikJournalsComponent,
-    UrednikRegisterComponent
+    UrednikRegisterComponent,
+    SuccessPageComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +44,8 @@ import { UrednikRegisterComponent } from './urednik-register/urednik-register.co
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    NgMultiSelectDropDownModule.forRoot()
+    NgMultiSelectDropDownModule.forRoot(),
+    ToastrModule.forRoot()
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

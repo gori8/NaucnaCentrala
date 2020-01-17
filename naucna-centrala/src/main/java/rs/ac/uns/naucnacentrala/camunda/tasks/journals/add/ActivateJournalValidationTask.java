@@ -33,16 +33,33 @@ public class ActivateJournalValidationTask implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
+        boolean flag_val=true;
         Casopis casopis=casopisRepository.findByProcessInstanceId(execution.getProcessInstanceId());
         ArrayList<String> userIds= (ArrayList<String>) execution.getVariable("recezentiSel");
-        for(String id : userIds){
-            User user=userRepository.getOne(Long.valueOf(id));
-            user.getRecenziramCasopise().add(casopis);
-            casopis.getRecezenti().add(user);
-            casopis.setCasopisStatus(CasopisStatus.WAITING_FOR_APPROVAL);
-            casopisRepository.save(casopis);
+        ArrayList<String> uredniciIds= (ArrayList<String>) execution.getVariable("uredniciSel");
+        if(userIds.size()<2){
+            flag_val=false;
+            HashMap<String,String> valErros=new HashMap<>();
+            valErros.put("recezentiSel","You have to select at least 2 reviewers");
+            execution.setVariable("validationErrors",valErros);
+        }else {
+            for (String id : userIds) {
+                User user = userRepository.getOne(Long.valueOf(id));
+                user.getRecenziramCasopise().add(casopis);
+                casopis.getRecezenti().add(user);
+                casopis.setCasopisStatus(CasopisStatus.WAITING_FOR_APPROVAL);
+                casopisRepository.save(casopis);
+            }
+
+            for (String id : uredniciIds) {
+                User user = userRepository.getOne(Long.valueOf(id));
+                user.getUredjujemCasopise().add(casopis);
+                casopis.getUrednici().add(user);
+                casopis.setCasopisStatus(CasopisStatus.WAITING_FOR_APPROVAL);
+                casopisRepository.save(casopis);
+            }
         }
-        execution.setVariable("flag_val",true);
+        execution.setVariable("flag_val",flag_val);
     }
 
 }

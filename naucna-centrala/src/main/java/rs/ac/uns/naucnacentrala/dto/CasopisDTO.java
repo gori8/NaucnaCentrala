@@ -9,6 +9,7 @@ import rs.ac.uns.naucnacentrala.model.NacinPlacanja;
 import rs.ac.uns.naucnacentrala.model.NaucnaOblast;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +29,10 @@ public class CasopisDTO {
 
     private String koPlaca;
 
+    @NotEmpty(message="At least one must be selected.")
     private List<NaucnaOblastDTO> naucneOblasti=new ArrayList<>();
 
+    @NotEmpty(message="At least one must be selected.")
     private List<NacinPlacanjaDTO> naciniPlacanja=new ArrayList<>();
 
     private String taskId;

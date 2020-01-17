@@ -106,23 +106,14 @@ export class ActivateJournalComponent implements OnInit {
         this.ngOnInit();
       },
       err => {
-      			alert("VISE SRECE DRUGI PUT");
-              console.log(err);
-              this.formFieldsDto.taskId=err["taskID"];
-              let map=new Map(Object.entries(err));
+      			console.log(err);
+              this.formFieldsDto.taskId=err.error["taskID"];
+              let map=new Map(Object.entries(err.error));
               map.delete("taskID");
               for(let key of Array.from( map.keys()) ) {
-                 if(key=="unique"){
-                  alert("Username or email are not unique!");
-                  let fieldUsername=this.formFields.find(field => field.id=="username");
-                  let fieldEmail=this.formFields.find(field => field.id=="email");
-                  fieldUsername.err=true;
-                  fieldEmail.err=true;
-                  break;
-                }
                let field=this.formFields.find(field => field.id==key);  
                field.err=true;
-               field.errMsg=map[key];
+               field.errMsg=map.get(key);
         }
       }
     );

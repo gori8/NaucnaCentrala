@@ -9,6 +9,7 @@ import rs.ac.uns.naucnacentrala.model.Casopis;
 import rs.ac.uns.naucnacentrala.model.NaucnaOblast;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
@@ -23,14 +24,19 @@ public class UserDTO {
 
     private Long id;
 
+    @NotBlank(message="Username cannot be blank")
+    @NotNull(message="Username cannot be null")
     private String username;
 
+    @NotBlank(message="Username cannot be blank")
+    @NotNull(message="Username cannot be null")
     private String password;
 
     private String ime;
 
     private String prezime;
 
+    @Email(message="Invalid email format.")
     private String email;
 
     private String grad;
