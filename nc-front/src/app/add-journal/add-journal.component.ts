@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ScienceJournalService } from '../_services/science-journal/science-journal.service';
 import { BpmnService } from '../_services/bpmn/bpmn.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -12,7 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class AddJournalComponent implements OnInit {
 
-  constructor(private scienceJournalService : ScienceJournalService, private bpmnService : BpmnService, private router : Router,private toastr : ToastrService) { }
+  constructor(private scienceJournalService : ScienceJournalService, private bpmnService : BpmnService, private router : Router) { }
 
   private formFieldsDto = null;
   private formFields = [];
@@ -55,7 +54,6 @@ export class AddJournalComponent implements OnInit {
 
     x.subscribe(
       res => {
-        this.toastr.success("Accepted successfully")
         this.router.navigate(['/journal/activate', this.processInstanceID]);
       },
       err => {

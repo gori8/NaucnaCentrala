@@ -1,5 +1,6 @@
 package rs.ac.uns.naucnacentrala.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RuntimeService;
@@ -8,6 +9,7 @@ import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
@@ -15,7 +17,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import rs.ac.uns.naucnacentrala.dto.FormFieldsDto;
 import rs.ac.uns.naucnacentrala.dto.FormSubmissionDto;
+import rs.ac.uns.naucnacentrala.dto.KoautorDTO;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,6 +38,9 @@ public class CamundaUtils {
     @Autowired
     IdentityService identityService;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
     public FormFieldsDto createFormDTO(Task task, String processInstanceId){
         TaskFormData tfd = formService.getTaskFormData(task.getId());
         List<FormField> properties = tfd.getFormFields();
@@ -44,6 +51,17 @@ public class CamundaUtils {
     {
         HashMap<String, Object> map = new HashMap<String, Object>();
         for(FormSubmissionDto temp : list){
+            System.out.println(temp.getFieldId()+":   "+temp.getFieldValue());
+            /*if(temp.getFieldValue().toString().startsWith("[{")) {
+                try {
+                    List<KoautorDTO> koautori = Arrays.asList(objectMapper.readValue(temp.getFieldValue().toString(), KoautorDTO[].class));
+                    map.put(temp.getFieldId(), koautori);
+                } catch (Exception ex1) {
+                    ex1.printStackTrace();
+                }
+            }else {
+                map.put(temp.getFieldId(), temp.getFieldValue());
+            }*/
             map.put(temp.getFieldId(), temp.getFieldValue());
         }
 

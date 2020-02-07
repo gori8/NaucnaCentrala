@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegistrationComponent } from './registration/registration.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NavbarComponent } from './navbar/navbar.component';
+import { NavbarComponent } from './_navbar/navbar.component';
 import { LoginComponent } from './login/login.component';
 import { JwtInterceptor, ErrorInterceptor } from './_helpers';
 import { HomeComponent } from './home/home.component';
@@ -18,7 +18,15 @@ import { AdminRegistrationsComponent } from './admin-registrations/admin-registr
 import { UrednikJournalsComponent } from './urednik-journals/urednik-journals.component';
 import { UrednikRegisterComponent } from './urednik-register/urednik-register.component';
 import { SuccessPageComponent } from './success-page/success-page.component';
-import { ToastrModule } from 'ngx-toastr';
+import { NotifierModule } from "angular-notifier";
+import { AuthorSelectJournalComponent } from './author-select-journal/author-select-journal.component';
+import { AuthorInputComponent } from './author-input/author-input.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FileUploadModule } from 'ng2-file-upload';
+import { ShowPdfComponent } from './show-pdf/show-pdf.component';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+
+
 
 
 
@@ -36,7 +44,10 @@ import { ToastrModule } from 'ngx-toastr';
     AdminRegistrationsComponent,
     UrednikJournalsComponent,
     UrednikRegisterComponent,
-    SuccessPageComponent
+    SuccessPageComponent,
+    AuthorSelectJournalComponent,
+    AuthorInputComponent,
+    ShowPdfComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +56,10 @@ import { ToastrModule } from 'ngx-toastr';
     HttpClientModule,
     ReactiveFormsModule,
     NgMultiSelectDropDownModule.forRoot(),
-    ToastrModule.forRoot()
+    NotifierModule,
+    NgbModule,
+    FileUploadModule,
+    NgxExtendedPdfViewerModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

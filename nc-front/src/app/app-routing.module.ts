@@ -11,6 +11,10 @@ import { AdminRegistrationsComponent } from './admin-registrations/admin-registr
 import { UrednikJournalsComponent } from './urednik-journals/urednik-journals.component';
 import { UrednikRegisterComponent } from './urednik-register/urednik-register.component';
 import { SuccessPageComponent } from './success-page/success-page.component';
+import { AuthorSelectJournalComponent } from './author-select-journal/author-select-journal.component';
+import { AuthorGuard } from './_guards/author.guard';
+import { AuthorInputComponent } from './author-input/author-input.component';
+import { ShowPdfComponent } from './show-pdf/show-pdf.component';
 
 
 const routes: Routes = [
@@ -22,6 +26,9 @@ const routes: Routes = [
 	{ path: 'admin/journals', component: AdminJournalsComponent, canActivate: [AdminGuard] },
   { path: 'admin/users', component: AdminRegistrationsComponent, canActivate: [AdminGuard] },
   { path: 'admin/register/urednik', component: UrednikRegisterComponent, canActivate: [AdminGuard] },
+  { path: 'author/select/journal', component: AuthorSelectJournalComponent, canActivate: [AuthorGuard] },
+  { path: 'input/paper/:processInstanceID', component: AuthorInputComponent, canActivate: [AuthorGuard] },
+  { path: 'pdf', component: ShowPdfComponent, canActivate: [AuthorGuard] },
 	{ path: 'register', component: RegistrationComponent },
 	{ path: 'login', component: LoginComponent },
 	{ path: '**', redirectTo: '' }

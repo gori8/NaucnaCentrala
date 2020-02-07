@@ -14,7 +14,7 @@ public class RegMailSenderTask implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
-        String to="goriantolovic@gmail.com";
+        String to=delegateExecution.getVariable("email").toString();
         String subject="Naucna Centrala registration confirmation";
         String htmlBody="<a href=\"http://localhost:8080/restapi/registration/complete/"+delegateExecution.getProcessInstanceId()+"\">Click to confirm your registration</a>\n";
         System.out.println(htmlBody);

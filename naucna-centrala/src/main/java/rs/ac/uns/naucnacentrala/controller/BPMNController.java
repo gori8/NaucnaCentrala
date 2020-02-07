@@ -70,27 +70,31 @@ public class BPMNController {
         HashMap<String, Object> map = camundaUtils.mapListToDto(dto);
         Task task=taskService.createTaskQuery().taskId(taskId).singleResult();
         String processInstanceId=task.getProcessInstanceId();
-        formService.submitTaskForm(taskId, map);
+        if(task.getName().equals("Unos podataka i naucnih oblasti")) {
+            formService.submitTaskForm(taskId, map);
 
 
-        Execution execution=runtimeService.createExecutionQuery().processInstanceId(processInstanceId).singleResult();
-        if(execution==null){
-            return  ResponseEntity.status(201).build();
-        }else {
-            BooleanValue validationValue = runtimeService.getVariableTyped(processInstanceId, VALIDATION_FLAG_VARIABLE);
-            if (validationValue.getValue()) {
-                return new ResponseEntity<>(HttpStatus.CREATED);
+            Execution execution = runtimeService.createExecutionQuery().processInstanceId(processInstanceId).singleResult();
+            if (execution == null) {
+                return ResponseEntity.status(201).build();
             } else {
-                ObjectValue valErrorsVal = runtimeService.getVariableTyped(task.getProcessInstanceId(), VALIDATION_ERRORS_VARIABLE);
-                HashMap<String, String> valErrors = (HashMap<String, String>) valErrorsVal.getValue();
-                Task activeTask = taskService.createTaskQuery().processInstanceId(processInstanceId).active().list().get(0);
-                valErrors.put("taskID", activeTask.getId());
-                return ResponseEntity.badRequest().body(valErrors);
+                BooleanValue validationValue = runtimeService.getVariableTyped(processInstanceId, VALIDATION_FLAG_VARIABLE);
+                if (validationValue.getValue()) {
+                    return new ResponseEntity<>(HttpStatus.CREATED);
+                } else {
+                    ObjectValue valErrorsVal = runtimeService.getVariableTyped(task.getProcessInstanceId(), VALIDATION_ERRORS_VARIABLE);
+                    HashMap<String, String> valErrors = (HashMap<String, String>) valErrorsVal.getValue();
+                    Task activeTask = taskService.createTaskQuery().processInstanceId(processInstanceId).active().list().get(0);
+                    valErrors.put("taskID", activeTask.getId());
+                    return ResponseEntity.badRequest().body(valErrors);
+                }
             }
+        }else{
+            return ResponseEntity.status(403).build();
         }
     }
 
-    @PreAuthorize("hasRole('UREDNIK') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('UREDNIK') or hasRole('ADMIN') or hasRole('AUTHORS')")
     @RequestMapping(method = RequestMethod.POST, value = "/protected/form/{taskId}")
     public ResponseEntity postProtected(@RequestBody List<FormSubmissionDto> dto, @PathVariable String taskId) {
 
@@ -102,6 +106,9 @@ public class BPMNController {
         String processInstanceId=task.getProcessInstanceId();
         if(task.getAssignee().equals(auth.getName())) {
             formService.submitTaskForm(taskId, map);
+            if(map.get("koautori")!=null) {
+                runtimeService.setVariable(processInstanceId,"koautori", map.get("koautori"));
+            }
         }else{
             return ResponseEntity.status(403).build();
         }
@@ -112,19 +119,24 @@ public class BPMNController {
             return  ResponseEntity.status(201).build();
         }else {
             BooleanValue validationValue = runtimeService.getVariableTyped(processInstanceId, VALIDATION_FLAG_VARIABLE);
-            if (validationValue.getValue()) {
-                return new ResponseEntity<>(HttpStatus.CREATED);
+            if(validationValue!=null){
+                if (validationValue.getValue()) {
+                    return new ResponseEntity<>(HttpStatus.CREATED);
+                }
+                else {
+                    ObjectValue valErrorsVal = runtimeService.getVariableTyped(task.getProcessInstanceId(), VALIDATION_ERRORS_VARIABLE);
+                    HashMap<String, String> valErrors = (HashMap<String, String>) valErrorsVal.getValue();
+                    Task activeTask = taskService.createTaskQuery().processInstanceId(processInstanceId).active().list().get(0);
+                    valErrors.put("taskID", activeTask.getId());
+                    return ResponseEntity.badRequest().body(valErrors);
+                }
             } else {
-                ObjectValue valErrorsVal = runtimeService.getVariableTyped(task.getProcessInstanceId(), VALIDATION_ERRORS_VARIABLE);
-                HashMap<String, String> valErrors = (HashMap<String, String>) valErrorsVal.getValue();
-                Task activeTask = taskService.createTaskQuery().processInstanceId(processInstanceId).active().list().get(0);
-                valErrors.put("taskID", activeTask.getId());
-                return ResponseEntity.badRequest().body(valErrors);
+                return new ResponseEntity<>(HttpStatus.OK);
             }
         }
     }
 
-    @PreAuthorize("hasRole('UREDNIK')")
+    @PreAuthorize("hasRole('UREDNIK') or hasRole('AUTHORS')")
     @RequestMapping(method = RequestMethod.GET, value = "/task/active/{processInstanceId}")
     public ResponseEntity getActiveTask(@PathVariable String processInstanceId) {
 

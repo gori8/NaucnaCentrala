@@ -15,4 +15,6 @@ public interface CasopisRepository extends JpaRepository<Casopis,Long> {
 
     public List<Casopis> findByGlavniUrednik(String glavniUrednik);
 
+    public List<Casopis> findAllByEnabled(Boolean enabled);
+
 }

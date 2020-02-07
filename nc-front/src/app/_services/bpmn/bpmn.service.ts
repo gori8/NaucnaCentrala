@@ -19,4 +19,13 @@ export class BpmnService {
   postProtectedFormData(taskID,formData): Observable<any>{
     return this.http.post(`${BASE_CONTROLLER_URL}/protected/form/`+taskID,formData);
   }
+
+  getActiveTaskForm(processInstanceId): Observable<any>{
+    return this.http.get(`${BASE_CONTROLLER_URL}/task/active/`+processInstanceId);
+  }
+ 
+  getNonActivatedJournals(): Observable<any>{
+    return this.http.get(`${BASE_CONTROLLER_URL}/admin/journal`);
+  }
+
 }

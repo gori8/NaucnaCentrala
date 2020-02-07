@@ -17,14 +17,7 @@ export class ScienceJournalService {
     return this.http.get(`${BASE_JOURNAL_CONTROLLER_URL}`);
   }
 
-  getActivateJournalForm(processInstanceId): Observable<any>{
-    return this.http.get(`${BASE_BPMN_CONTROLLER_URL}/task/active/`+processInstanceId);
-  }
- 
-  getNonActivatedJournals(): Observable<any>{
-    return this.http.get(`${BASE_BPMN_CONTROLLER_URL}/admin/journal`);
-  }
-
+  
   getMineJournals(): Observable<any>{
     return this.http.get(`${BASE_JOURNAL_CONTROLLER_URL}/mine`);
   }

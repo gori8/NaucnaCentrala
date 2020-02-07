@@ -1,0 +1,18 @@
+
+
+<ng-template #content let-modal>
+                                  <div class="modal-header">
+                                    <h4 class="modal-title" id="modal-basic-title">PDF</h4>
+                                    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <ngx-extended-pdf-viewer [src]="src" useBrowserLocale="true" height="80vh"></ngx-extended-pdf-viewer>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-dark" (click)="modal.close('uspeh')">Save</button>
+                                  </div>
+                                </ng-template>
+
+<button type="button" class="btn btn-outline-primary" (click)="open(content)">Launch demo modal</button>

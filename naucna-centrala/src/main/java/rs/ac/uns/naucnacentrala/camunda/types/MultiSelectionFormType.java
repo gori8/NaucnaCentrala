@@ -5,18 +5,28 @@ import lombok.NoArgsConstructor;
 import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.impl.form.type.AbstractFormFieldType;
 import org.camunda.bpm.engine.variable.Variables;
+import org.camunda.bpm.engine.variable.type.SerializableValueType;
+import org.camunda.bpm.engine.variable.type.ValueType;
+import org.camunda.bpm.engine.variable.value.ObjectValue;
+import org.camunda.bpm.engine.variable.value.StringValue;
 import org.camunda.bpm.engine.variable.value.TypedValue;
+import org.camunda.spin.plugin.variable.SpinValues;
+import org.camunda.spin.plugin.variable.value.JsonValue;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @NoArgsConstructor
-public class UredniciMultiSelectionFormType extends AbstractFormFieldType {
+public class MultiSelectionFormType extends AbstractFormFieldType {
 
-    public static final String TYPE_NAME = "urednici-multi-select";
+    private String TYPE_NAME;
     protected Map<Long, String> values=new HashMap<>();
 
-    public UredniciMultiSelectionFormType(Map<Long, String> values) {
+    public MultiSelectionFormType(String name){
+        this.TYPE_NAME=name;
+    };
+
+    public MultiSelectionFormType(Map<Long, String> values) {
         this.values = values;
     }
 

@@ -1,16 +1,23 @@
 package rs.ac.uns.naucnacentrala.model;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-public class Casopis {
+public class Casopis implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
 
     @Id
     @Column(name = "id")
@@ -65,6 +72,7 @@ public class Casopis {
 
     private String glavniUrednik;
 
+    @Enumerated(EnumType.STRING)
     private CasopisStatus casopisStatus;
 
     private Boolean enabled=false;

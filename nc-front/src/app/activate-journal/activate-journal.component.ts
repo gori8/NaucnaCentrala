@@ -37,7 +37,7 @@ export class ActivateJournalComponent implements OnInit {
 
   		this.processInstanceID=this.route.snapshot.paramMap.get('processInstanceID');
 
-    	this.scienceJournalService.getActivateJournalForm(this.processInstanceID).subscribe(
+    	this.bpmnService.getActiveTaskForm(this.processInstanceID).subscribe(
     		res => {
                this.formFieldsDto = res;
                this.formFields = res.formFields;
@@ -77,10 +77,8 @@ export class ActivateJournalComponent implements OnInit {
   }
 
   onItemSelect(item: any) {
-    console.log(item);
   }
   onSelectAll(items: any) {
-    console.log(items);
   }
 
   onSubmit(value, form){

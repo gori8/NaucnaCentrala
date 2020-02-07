@@ -1,0 +1,22 @@
+<div *ngFor="let field of formFields">
+  <div class="container">
+    <div class="row mt-5">
+      <h2 class="text-primary mb-5">Časopisi:</h2>
+    </div>
+    <div class="row ml-auto mr-auto">
+      <div class="col col-md-3 mb-5 mr-5" *ngFor="let key of enumValues">
+        <div class="card bg-dark text-light" style="height: 32rem;width: 18rem;">
+          <div class="text-center">
+            <img src="assets/img/paper.png" class="card-img-top mt-4"  style="height: 8rem;width:8rem">
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">{{field.type.values[key]}}</h3>
+            <div class="row">
+              <button class="btn btn-outline-light custom ml-3 mb-1" (click)="onSelect(field.id,key)">Izaberi</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

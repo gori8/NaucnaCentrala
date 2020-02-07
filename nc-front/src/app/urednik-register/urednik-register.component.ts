@@ -4,7 +4,8 @@ import { RegistrationService } from '../_services/registration/registration.serv
 import { BpmnService } from '../_services/bpmn/bpmn.service';
 import { ScienceJournalService } from '../_services/science-journal/science-journal.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
+import { NotifierService } from "angular-notifier";
+
 
 
 @Component({
@@ -15,7 +16,7 @@ import { ToastrService } from 'ngx-toastr';
 export class UrednikRegisterComponent implements OnInit {
 
 
-   constructor(private registrationService : RegistrationService, private bpmnService : BpmnService, private router : Router, private route : ActivatedRoute,private toastr : ToastrService) { }
+   constructor(private registrationService : RegistrationService, private bpmnService : BpmnService, private router : Router, private route : ActivatedRoute,private notifierService : NotifierService) { }
 
   private formFieldsDto = null;
   private formFields = [];
@@ -109,7 +110,7 @@ export class UrednikRegisterComponent implements OnInit {
 
     x.subscribe(
       res => {
-         this.toastr.success("Please confrim your registration via email");
+         this.notifierService.notify("success","New editor registered successfully.");
         this.router.navigate(['stagod']);
       },
       err => {

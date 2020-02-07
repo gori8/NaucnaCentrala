@@ -27,13 +27,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
-		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -115,6 +108,34 @@
 			<artifactId>spring-boot-starter-mail</artifactId>
 			<version>LATEST</version>
 		</dependency>
+		<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy-all</artifactId>
+			<version>3.0.0-rc-3</version>
+			<type>pom</type>
+		</dependency>
+		<dependency>
+			<groupId>org.camunda.spin</groupId>
+			<artifactId>camunda-spin-core</artifactId>
+			<version>1.8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.camunda.spin</groupId>
+			<artifactId>camunda-spin-dataformat-all</artifactId>
+			<version>1.8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.camunda.bpm</groupId>
+			<artifactId>camunda-engine-plugin-spin</artifactId>
+			<version>7.12.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.vaadin.external.google</groupId>
+			<artifactId>android-json</artifactId>
+			<version>0.0.20131108.vaadin1</version>
+			<scope>compile</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>

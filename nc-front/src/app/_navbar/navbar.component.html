@@ -6,5 +6,6 @@
       <a class="navbar-brand clicker" routerLink="admin/users" *ngIf="(currentUser$ | async)?.role=='ROLE_ADMIN'">Activate Reviewers</a>
       <a class="navbar-brand clicker" routerLink="urednik/journals" *ngIf="(currentUser$ | async)?.role=='ROLE_UREDNIK'">My Journals</a>
       <a class="navbar-brand clicker" routerLink="admin/register/urednik" *ngIf="(currentUser$ | async)?.role=='ROLE_ADMIN'">Register New Editors</a>
+      <a class="navbar-brand clicker" routerLink="author/select/journal" *ngIf="(currentUser$ | async)?.role=='ROLE_AUTHORS'">Add paper to journal</a>
       <a class="navbar-brand clicker" (click)="logout()" *ngIf="(currentUser$ | async)">Logout</a>
 </nav>
