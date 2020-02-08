@@ -8,13 +8,14 @@ import rs.ac.uns.naucnacentrala.model.CasopisStatus;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CasopisDTO {
+public class CasopisPV {
 
     private Long id;
 
@@ -26,20 +27,16 @@ public class CasopisDTO {
 
     private String koPlaca;
 
-    @NotEmpty(message="At least one must be selected.")
-    private List<NaucnaOblastDTO> naucneOblasti=new ArrayList<>();
-
-    @NotEmpty(message="At least one must be selected.")
-    private List<NacinPlacanjaDTO> naciniPlacanja=new ArrayList<>();
-
-    private String taskId;
-
     private String processInstanceId;
 
     private Boolean enabled;
 
-    private CasopisStatus casopisStatus = CasopisStatus.WAITING_FOR_INPUT;
+    private CasopisStatus casopisStatus;
 
+    private String glavniUrednik;
 
+    private LinkedHashMap<String, String> urednici = new LinkedHashMap<>();
+
+    private LinkedHashMap<String, ArrayList<String>> recezenti = new LinkedHashMap<>();
 
 }

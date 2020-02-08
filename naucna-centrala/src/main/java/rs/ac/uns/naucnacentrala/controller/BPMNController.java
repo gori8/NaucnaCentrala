@@ -98,7 +98,7 @@ public class BPMNController {
         }
     }
 
-    @PreAuthorize("hasRole('UREDNIK') or hasRole('ADMIN') or hasRole('AUTHORS')")
+    @PreAuthorize("hasRole('UREDNIK') or hasRole('ADMIN') or hasRole('AUTHORS') or hasRole('RECEZENT')")
     @RequestMapping(method = RequestMethod.POST, value = "/protected/form/{taskId}")
     public ResponseEntity postProtected(@RequestBody List<FormSubmissionDto> dto, @PathVariable String taskId) {
 
@@ -118,8 +118,8 @@ public class BPMNController {
         }
 
 
-        Execution execution=runtimeService.createExecutionQuery().processInstanceId(processInstanceId).list().get(0);
-        if(execution==null){
+        List<Execution> executions=runtimeService.createExecutionQuery().processInstanceId(processInstanceId).list();
+        if(executions.size()==0){
             return  ResponseEntity.status(201).build();
         }else {
             BooleanValue validationValue = runtimeService.getVariableTyped(processInstanceId, VALIDATION_FLAG_VARIABLE);

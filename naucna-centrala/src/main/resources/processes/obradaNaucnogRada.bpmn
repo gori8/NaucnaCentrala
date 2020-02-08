@@ -97,43 +97,8 @@
             </camunda:properties>
           </camunda:formField>
         </camunda:formData>
-        <camunda:taskListener event="create">
-          <camunda:script scriptFormat="groovy">def generateNaucneOblasti(l){
-    def no1=new LinkedHashMap();
-    no1.id="1";
-    no1.naziv="Biologija";
-    def no2=new LinkedHashMap();
-    no2.id="2";
-    no2.naziv="Matematika";
-    def no3=new LinkedHashMap();
-    no3.id="3";
-    no3.naziv="Hemija";
-    def no4=new LinkedHashMap();
-    no4.id="4";
-    no4.naziv="Istorija";
-    l.add(no1);
-    l.add(no2);
-    l.add(no3);
-    l.add(no4);
-}
-
-naucneOblasti=new java.util.ArrayList();
-generateNaucneOblasti(naucneOblasti);
-taskFormData = task.getExecution().getProcessEngineServices().getFormService().getTaskFormData(task.getId());
-
-formFields = taskFormData. getFormFields();
-if(formFields!=null){
-   for(field in formFields){
-       if( field.getId() == "naucna_oblast"){
-           //ovo je nase select polje
-           items = field.getType().getValues();
-           for(nobl in naucneOblasti){
-               items.put(nobl.id,nobl.naziv);
-           }
-       }
-   }
-}</camunda:script>
-        </camunda:taskListener>
+        <camunda:taskListener delegateExpression="${importNaunceOblastiCreateListener}" event="create" />
+        <camunda:taskListener delegateExpression="${setNOViewCompleteListener}" event="complete" />
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0pqx695</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0xslgbx</bpmn:outgoing>
@@ -199,7 +164,7 @@ execution.setVariable("mailList", instance);</bpmn:script>
               <camunda:constraint name="readonly" />
             </camunda:validation>
           </camunda:formField>
-          <camunda:formField id="naucna_oblastZaU" label="Naucna oblast:" type="string" defaultValue="${naucna_oblast==&#34;1&#34;?&#34;Biologija&#34;:naucna_oblast==&#34;2&#34;?&#34;Matematika&#34;:naucna_oblast==&#34;3&#34;?&#34;Hemija&#34;:&#34;Istorija&#34;}">
+          <camunda:formField id="naucna_oblastZaU" label="Naucna oblast:" type="string" defaultValue="${noDefValue}">
             <camunda:validation>
               <camunda:constraint name="readonly" />
             </camunda:validation>
@@ -361,64 +326,12 @@ if(formFields!=null){
     <bpmn:userTask id="izbor_recezenata" name="Izbor recezenata" camunda:assignee="${urednik_no}">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="selRecezenti" label="Izaberi ${brojacRec+1}. recezenta:" type="enum">
-            <camunda:validation>
-              <camunda:constraint name="required" />
-            </camunda:validation>
-          </camunda:formField>
-          <camunda:formField id="josRecezenata" label="Zelite li da unesete jos recezenata?" type="enum">
-            <camunda:validation>
-              <camunda:constraint name="required" />
-            </camunda:validation>
-            <camunda:value id="da" name="Da" />
-            <camunda:value id="ne" name="Ne" />
-          </camunda:formField>
+          <camunda:formField id="selectedRecezenti" type="sel-recezenti-multi-select" />
         </camunda:formData>
-        <camunda:taskListener event="complete">
-          <camunda:script scriptFormat="Groovy">selectedRecezenti=task.getExecution().getVariable("selectedRecezenti");
-brojac=task.getExecution().getVariable("brojacRec");
-taskFormData = task.getExecution().getProcessEngineServices().getFormService().getTaskFormData(task.getId());
-
-formFields = taskFormData.getFormFields();
-if(formFields!=null){
-   for(field in formFields){
-       if( field.getId() == "selRecezenti"){
-           if(!selectedRecezenti.contains(field.getValue().getValue())){
-                selectedRecezenti.add(field.getValue().getValue());
-                brojac++;
-            }
-       }
-   }
-}
-task.getExecution().setVariable("selectedRecezenti",selectedRecezenti);
-task.getExecution().setVariable("brojacRec",brojac);</camunda:script>
-        </camunda:taskListener>
-        <camunda:taskListener event="create">
-          <camunda:script scriptFormat="Groovy">taskFormData = task.getExecution().getProcessEngineServices().getFormService().getTaskFormData(task.getId());
-casopis = task.getExecution().getVariable("casopis");
-recezenti = casopis.recezenti;
-selectedRecezenti=task.getExecution().getVariable("selectedRecezenti");
-
-formFields = taskFormData.getFormFields();
-if(formFields!=null){
-   for(field in formFields){
-       if( field.getId() == "selRecezenti"){
-           //ovo je nase select polje
-           items = field.getType().getValues();
-           for(recezent in recezenti){
-                items.put(recezent,recezent);
-           }
-       }
-   }
-}</camunda:script>
-        </camunda:taskListener>
+        <camunda:taskListener delegateExpression="${importRecezentiCreateListener}" event="create" />
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1vzvn6j</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0iqzu9v</bpmn:outgoing>
-      <bpmn:multiInstanceLoopCharacteristics isSequential="true">
-        <bpmn:loopCardinality xsi:type="bpmn:tFormalExpression">50</bpmn:loopCardinality>
-        <bpmn:completionCondition xsi:type="bpmn:tFormalExpression">${brojacRec&gt;=2 &amp;&amp; josRecezenata=="ne"}</bpmn:completionCondition>
-      </bpmn:multiInstanceLoopCharacteristics>
     </bpmn:userTask>
     <bpmn:exclusiveGateway id="ExclusiveGateway_1km1iu3" default="SequenceFlow_0dp6iyy">
       <bpmn:incoming>SequenceFlow_1lz96iq</bpmn:incoming>
@@ -450,7 +363,7 @@ if(formFields!=null){
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="SequenceFlow_0wusoie" sourceRef="ExclusiveGateway_17t6csq" targetRef="unos_vremena_za_recenziju" />
     <bpmn:sequenceFlow id="SequenceFlow_0m58201" name="casopis nema recezenata" sourceRef="ExclusiveGateway_0r526x2" targetRef="gu_as_recezent">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${casopis.recezenti.size()==0}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${casopis.recezenti[naucna_oblast].size()==0}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:userTask id="unos_vremena_za_recenziju" name="Unos vremena za recenziju" camunda:assignee="${urednik_no}">
       <bpmn:extensionElements>

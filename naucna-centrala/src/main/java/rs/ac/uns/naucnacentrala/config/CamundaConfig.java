@@ -15,6 +15,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import rs.ac.uns.naucnacentrala.camunda.types.JsonFormType;
 import rs.ac.uns.naucnacentrala.camunda.types.MultiSelectionFormType;
+import rs.ac.uns.naucnacentrala.camunda.types.MultiSelectionStringFormType;
 
 
 import javax.sql.DataSource;
@@ -56,6 +57,7 @@ public class CamundaConfig {
         config.getCustomFormTypes().add(new MultiSelectionFormType("second-multi-select"));
         config.getCustomFormTypes().add(new MultiSelectionFormType("recezenti-multi-select"));
         config.getCustomFormTypes().add(new MultiSelectionFormType("urednici-multi-select"));
+        config.getCustomFormTypes().add(new MultiSelectionStringFormType("sel-recezenti-multi-select"));
         config.getCustomFormTypes().add(new JsonFormType("add-children"));
 
 
