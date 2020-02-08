@@ -15,6 +15,8 @@ import { AuthorSelectJournalComponent } from './author-select-journal/author-sel
 import { AuthorGuard } from './_guards/author.guard';
 import { AuthorInputComponent } from './author-input/author-input.component';
 import { ShowPdfComponent } from './show-pdf/show-pdf.component';
+import { UserTasksComponent } from './user-tasks/user-tasks.component';
+import { ActiveTaskComponent } from './active-task/active-task.component';
 
 
 const routes: Routes = [
@@ -30,6 +32,8 @@ const routes: Routes = [
   { path: 'input/paper/:processInstanceID', component: AuthorInputComponent, canActivate: [AuthorGuard] },
   { path: 'pdf', component: ShowPdfComponent, canActivate: [AuthorGuard] },
 	{ path: 'register', component: RegistrationComponent },
+  { path: 'tasks', component: UserTasksComponent },
+  { path: 'task/:taskID', component: ActiveTaskComponent },
 	{ path: 'login', component: LoginComponent },
 	{ path: '**', redirectTo: '' }
 ];

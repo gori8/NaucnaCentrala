@@ -43,7 +43,7 @@ public class FileSystemStorageService implements StorageService {
 			try (InputStream inputStream = file.getInputStream()) {
 				Files.copy(inputStream, this.rootLocation.resolve(filename),
 					StandardCopyOption.REPLACE_EXISTING);
-				return rootLocation.toString()+"/"+filename;
+				return filename;
 			}
 		}
 		catch (IOException e) {

@@ -85,6 +85,9 @@ export class ActivateJournalComponent implements OnInit {
   	console.log(this.propertyType);
     let o = new Array();
     for (var property in value) {
+      let fieldReset=this.formFields.find(field => field.id==property);
+      fieldReset.err=false;
+      fieldReset.errMsg=null;
       if(this.propertyType[property].includes('multi-select')){
       	let arr = [];
       	for(let itm of value[property]){

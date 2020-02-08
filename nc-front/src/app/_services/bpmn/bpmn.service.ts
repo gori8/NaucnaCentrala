@@ -28,4 +28,12 @@ export class BpmnService {
     return this.http.get(`${BASE_CONTROLLER_URL}/admin/journal`);
   }
 
+  getTask(id): Observable<any>{
+    return this.http.get(`${BASE_CONTROLLER_URL}/tasks/`+id);
+  }
+
+  getMyTasks(): Observable<any>{
+    return this.http.get(`${BASE_CONTROLLER_URL}/tasks`);
+  }
+
 }

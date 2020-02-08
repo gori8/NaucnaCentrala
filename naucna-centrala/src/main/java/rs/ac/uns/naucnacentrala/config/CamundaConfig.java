@@ -4,7 +4,6 @@ import org.camunda.bpm.engine.impl.form.type.AbstractFormFieldType;
 import org.camunda.bpm.engine.spring.ProcessEngineFactoryBean;
 import org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration;
 import org.camunda.bpm.engine.spring.SpringProcessEngineServicesConfiguration;
-import org.camunda.bpm.spring.boot.starter.spin.SpringBootSpinProcessEnginePlugin;
 import org.camunda.spin.plugin.impl.SpinProcessEnginePlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +13,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
-import rs.ac.uns.naucnacentrala.camunda.types.AddChildrenFormType;
+import rs.ac.uns.naucnacentrala.camunda.types.JsonFormType;
 import rs.ac.uns.naucnacentrala.camunda.types.MultiSelectionFormType;
 
 
@@ -51,13 +50,14 @@ public class CamundaConfig {
         if(config.getCustomFormTypes()==null){
             config.setCustomFormTypes(new ArrayList<AbstractFormFieldType>());
         }
+        config.getProcessEnginePlugins().add(new SpinProcessEnginePlugin());
+        config.setDefaultSerializationFormat("application/json");
         config.getCustomFormTypes().add(new MultiSelectionFormType("first-multi-select"));
         config.getCustomFormTypes().add(new MultiSelectionFormType("second-multi-select"));
         config.getCustomFormTypes().add(new MultiSelectionFormType("recezenti-multi-select"));
         config.getCustomFormTypes().add(new MultiSelectionFormType("urednici-multi-select"));
-        config.getCustomFormTypes().add(new AddChildrenFormType("add-children"));
-        config.getProcessEnginePlugins().add(new SpinProcessEnginePlugin());
-        config.setDefaultSerializationFormat("application/json");
+        config.getCustomFormTypes().add(new JsonFormType("add-children"));
+
 
 
 

@@ -121,7 +121,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.camunda.spin</groupId>
-			<artifactId>camunda-spin-dataformat-all</artifactId>
+			<artifactId>camunda-spin-dataformat-json-jackson</artifactId>
 			<version>1.8.0</version>
 		</dependency>
 		<dependency>

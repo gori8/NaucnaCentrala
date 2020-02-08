@@ -25,6 +25,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FileUploadModule } from 'ng2-file-upload';
 import { ShowPdfComponent } from './show-pdf/show-pdf.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { ActiveTaskComponent } from './active-task/active-task.component';
+import { UserTasksComponent } from './user-tasks/user-tasks.component';
 
 
 
@@ -47,7 +49,9 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
     SuccessPageComponent,
     AuthorSelectJournalComponent,
     AuthorInputComponent,
-    ShowPdfComponent
+    ShowPdfComponent,
+    ActiveTaskComponent,
+    UserTasksComponent
   ],
   imports: [
     BrowserModule,

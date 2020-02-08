@@ -1,49 +1,40 @@
 package rs.ac.uns.naucnacentrala.camunda.types;
 
+
 import org.camunda.bpm.engine.impl.form.type.AbstractFormFieldType;
 import org.camunda.bpm.engine.variable.Variables;
+import org.camunda.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl;
+import org.camunda.bpm.engine.variable.value.StringValue;
 import org.camunda.bpm.engine.variable.value.TypedValue;
+import org.camunda.spin.json.SpinJsonNode;
 import org.camunda.spin.plugin.variable.SpinValues;
 import org.camunda.spin.plugin.variable.value.JsonValue;
 import org.camunda.spin.plugin.variable.value.SpinValue;
 
-import java.util.HashMap;
-import java.util.Map;
+import static org.camunda.spin.Spin.JSON;
 
-public class AddChildrenFormType extends AbstractFormFieldType {
+public class JsonFormType extends AbstractFormFieldType {
 
     private String TYPE_NAME;
 
-    public AddChildrenFormType(String name){
+    public JsonFormType(String name){
         this.TYPE_NAME=name;
-    };
-
+    }
 
     @Override
     public String getName() {
         return TYPE_NAME;
     }
 
-
-
     @Override
     public TypedValue convertToFormValue(TypedValue typedValue) {
-        if(typedValue.getValue()!=null) {
-            JsonValue retValue = SpinValues.jsonValue(typedValue.getValue().toString()).create();
-            return retValue;
-        }else{
-            return typedValue;
-        }
+        StringValue ret=Variables.stringValue("[]");
+        return ret;
     }
 
     @Override
     public TypedValue convertToModelValue(TypedValue typedValue) {
-        if(typedValue.getValue()!=null) {
-            JsonValue retValue = SpinValues.jsonValue(typedValue.getValue().toString()).create();
-            return retValue;
-        }else{
-            return typedValue;
-        }
+        return typedValue;
     }
 
     @Override
@@ -55,5 +46,4 @@ public class AddChildrenFormType extends AbstractFormFieldType {
     public String convertModelValueToFormValue(Object o) {
         return null;
     }
-
 }

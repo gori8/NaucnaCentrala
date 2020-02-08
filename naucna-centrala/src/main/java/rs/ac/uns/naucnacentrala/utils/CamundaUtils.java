@@ -51,17 +51,8 @@ public class CamundaUtils {
     {
         HashMap<String, Object> map = new HashMap<String, Object>();
         for(FormSubmissionDto temp : list){
+            //String escaped=temp.getFieldValue().toString().replaceAll("\"","\\\\\"");
             System.out.println(temp.getFieldId()+":   "+temp.getFieldValue());
-            /*if(temp.getFieldValue().toString().startsWith("[{")) {
-                try {
-                    List<KoautorDTO> koautori = Arrays.asList(objectMapper.readValue(temp.getFieldValue().toString(), KoautorDTO[].class));
-                    map.put(temp.getFieldId(), koautori);
-                } catch (Exception ex1) {
-                    ex1.printStackTrace();
-                }
-            }else {
-                map.put(temp.getFieldId(), temp.getFieldValue());
-            }*/
             map.put(temp.getFieldId(), temp.getFieldValue());
         }
 

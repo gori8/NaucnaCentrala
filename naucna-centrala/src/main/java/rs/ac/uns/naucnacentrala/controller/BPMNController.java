@@ -8,6 +8,7 @@ import org.camunda.bpm.engine.runtime.Execution;
 import org.camunda.bpm.engine.task.Task;
 import org.camunda.bpm.engine.variable.value.BooleanValue;
 import org.camunda.bpm.engine.variable.value.ObjectValue;
+import org.camunda.bpm.engine.variable.value.StringValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,9 +23,12 @@ import rs.ac.uns.naucnacentrala.camunda.service.RegistrationService;
 import rs.ac.uns.naucnacentrala.dto.CasopisDTO;
 import rs.ac.uns.naucnacentrala.dto.FormFieldsDto;
 import rs.ac.uns.naucnacentrala.dto.FormSubmissionDto;
+import rs.ac.uns.naucnacentrala.dto.TaskDTO;
 import rs.ac.uns.naucnacentrala.model.Casopis;
 import rs.ac.uns.naucnacentrala.utils.CamundaUtils;
+import rs.ac.uns.naucnacentrala.utils.ObjectMapperUtils;
 
+import javax.ws.rs.Path;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -114,7 +118,7 @@ public class BPMNController {
         }
 
 
-        Execution execution=runtimeService.createExecutionQuery().processInstanceId(processInstanceId).singleResult();
+        Execution execution=runtimeService.createExecutionQuery().processInstanceId(processInstanceId).list().get(0);
         if(execution==null){
             return  ResponseEntity.status(201).build();
         }else {
@@ -144,10 +148,14 @@ public class BPMNController {
         identityService.setAuthenticatedUserId(auth.getName());
 
         Task task = taskService.createTaskQuery().active().processInstanceId(processInstanceId).singleResult();
-        if (task.getAssignee().equals(auth.getName())) {
-            return ResponseEntity.ok().body(camundaUtils.createFormDTO(task, processInstanceId));
+        if(task!=null) {
+            if (task.getAssignee().equals(auth.getName())) {
+                return ResponseEntity.ok().body(camundaUtils.createFormDTO(task, processInstanceId));
+            } else {
+                return ResponseEntity.status(403).build();
+            }
         }else{
-            return  ResponseEntity.status(404).build();
+            return ResponseEntity.status(404).build();
         }
     }
 
@@ -182,6 +190,42 @@ public class BPMNController {
         return new ResponseEntity<>(camundaUtils.createFormDTO(task,task.getProcessInstanceId()), HttpStatus.OK);
     }
 
+
+    @RequestMapping(method = RequestMethod.GET, value = "/tasks")
+    public ResponseEntity getMyTasks(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        List<Task> tasks = taskService.createTaskQuery().active().taskAssignee(auth.getName()).processDefinitionKey("obradaNaucnogRada").list();
+
+        ArrayList<TaskDTO> ret = new ArrayList<>();
+        for(Task task : tasks){
+            TaskDTO taskDTO = new TaskDTO();
+            taskDTO.setName(task.getName());
+            taskDTO.setTaskId(task.getId());
+            String rad=runtimeService.getVariable(task.getProcessInstanceId(),"naslov").toString();
+            taskDTO.setRad(rad);
+            taskDTO.setProcessInstanceId(task.getProcessInstanceId());
+            ret.add(taskDTO);
+        }
+
+        return ResponseEntity.ok().body(ret);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/tasks/{id}")
+    public ResponseEntity getMyTask(@PathVariable String id){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Task task= taskService.createTaskQuery().taskId(id).singleResult();
+
+        if(task!=null) {
+            if (task.getAssignee().equals(auth.getName())) {
+                return ResponseEntity.ok().body(camundaUtils.createFormDTO(task, task.getProcessInstanceId()));
+            } else {
+                return ResponseEntity.status(403).build();
+            }
+        }else{
+            return ResponseEntity.status(404).build();
+        }
+
+    }
 
 
 }

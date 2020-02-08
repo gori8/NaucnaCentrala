@@ -56,12 +56,12 @@ public class PaperController {
     @RequestMapping(method = RequestMethod.POST,consumes = "multipart/form-data")
     public ResponseEntity handleFileUpload(@RequestParam("file") MultipartFile file) {
 
-        String path = storageService.store(file);
+        String name = storageService.store(file);
 
-        return ResponseEntity.ok(path);
+        return ResponseEntity.ok(name);
     }
 
-    @PreAuthorize("hasRole('AUTHORS')")
+    @PreAuthorize("hasRole('AUTHORS') or hasRole('UREDNIK') or hasRole('USER') or hasRole('RECEZENT')")
     @GetMapping("/files/{filename}")
     public ResponseEntity<byte[]> serveFile(@PathVariable String filename) throws IOException {
         System.out.println("Filename: "+filename);

@@ -93,11 +93,12 @@
               <camunda:property id="grad" value="string" />
               <camunda:property id="drzava" value="string" />
               <camunda:property id="email" value="string" />
+              <camunda:property id="type" value="json" />
             </camunda:properties>
           </camunda:formField>
         </camunda:formData>
         <camunda:taskListener event="create">
-          <camunda:script scriptFormat="Groovy">def generateNaucneOblasti(l){
+          <camunda:script scriptFormat="groovy">def generateNaucneOblasti(l){
     def no1=new LinkedHashMap();
     no1.id="1";
     no1.naziv="Biologija";
@@ -259,7 +260,14 @@ execution.setVariable("selectedRecezenti",new ArrayList());</bpmn:script>
     <bpmn:userTask id="provera_formata_rada" name="Urednik proverava format rada" camunda:assignee="${casopis.glavniUrednik}">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="pdfZaGU" label="Pdf: " type="string" defaultValue="${pdf}" />
+          <camunda:formField id="pdfZaGU" label="Pdf: " type="string" defaultValue="${pdf}">
+            <camunda:properties>
+              <camunda:property id="type" value="file" />
+            </camunda:properties>
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
           <camunda:formField id="potvrdaFormata" label="Format validan:" type="enum">
             <camunda:validation>
               <camunda:constraint name="required" />
