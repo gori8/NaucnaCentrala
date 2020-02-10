@@ -72,7 +72,7 @@ export class ActivateJournalComponent implements OnInit {
             },
         err => {
                 console.log(err);
-                this.router.navigate(['stagod']);
+                this.router.navigate(['urednik/journals']);
               });
   }
 

@@ -9,7 +9,7 @@
 package rs.ac.uns.naucnacentrala.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -21,7 +21,10 @@ import java.util.*;
 
 
 @Entity
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class User implements UserDetails {
 
     private static final long serialVersionUID = 1L;
@@ -86,7 +89,15 @@ public class User implements UserDetails {
             CascadeType.MERGE,
             CascadeType.PERSIST
     }, fetch = FetchType.LAZY)
-    private Set<Casopis> uredjujemCasopise=new HashSet<>();
+    private List<Casopis> uredjujemCasopise=new ArrayList<>();
+
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "user_casopis",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "casopis_id", referencedColumnName = "id"))
+    private List<Casopis> kupljeniCasopisi = new ArrayList<>();
+
 
 
     @Override

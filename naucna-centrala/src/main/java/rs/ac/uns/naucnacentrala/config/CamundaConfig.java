@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import rs.ac.uns.naucnacentrala.camunda.types.JsonFormType;
 import rs.ac.uns.naucnacentrala.camunda.types.MultiSelectionFormType;
 import rs.ac.uns.naucnacentrala.camunda.types.MultiSelectionStringFormType;
@@ -78,5 +79,13 @@ public class CamundaConfig {
         ProcessEngineFactoryBean factoryBean = new ProcessEngineFactoryBean();
         factoryBean.setProcessEngineConfiguration(processEngineConfiguration());
         return factoryBean;
+    }
+
+    @Bean
+    CharacterEncodingFilter characterEncodingFilter() {
+        CharacterEncodingFilter filter = new CharacterEncodingFilter();
+        filter.setEncoding("UTF-8");
+        filter.setForceEncoding(true);
+        return filter;
     }
 }

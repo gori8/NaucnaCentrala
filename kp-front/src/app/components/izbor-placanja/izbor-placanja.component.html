@@ -1,0 +1,18 @@
+<div class="darkbackground">
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col md-3"></div>
+            <div class="col md-6 mt-5 mb-5">
+                <h1 class="text-light">Izbor načina plaćanja</h1>
+                <select id="selectPayment" class="form-control mt-5" [(ngModel)]="selectedPaymentMethod">
+                    <option *ngFor="let item of naciniPlacanja" value="{{item.value}}">
+                        {{item.name}}
+                    </option>
+                </select>
+                <button id="submitPayment" [hidden]="hidden" (click)="submitPaymetMethod()" class="btn btn-primary mt-4">Prihvati</button>
+                <div [hidden]="!hidden" class="lds-roller mt-3"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+            </div>
+            <div class="col md-3"></div>
+        </div>
+    </div>
+</div>

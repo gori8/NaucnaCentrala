@@ -50,7 +50,6 @@ export class AuthorSelectJournalComponent implements OnInit {
 
     x.subscribe(
       res => {
-        this.notifierService.notify("success","Bravo!");
         this.router.navigate(['input/paper/'+this.processInstanceID])
       },
       err => {

@@ -34,7 +34,12 @@ public class JsonFormType extends AbstractFormFieldType {
 
     @Override
     public TypedValue convertToModelValue(TypedValue typedValue) {
-        return typedValue;
+        if(typedValue.getValue()!=null) {
+            StringValue stringValue = Variables.stringValue(typedValue.getValue().toString());
+            return stringValue;
+        }else{
+            return typedValue;
+        }
     }
 
     @Override

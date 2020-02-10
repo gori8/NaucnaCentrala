@@ -41,30 +41,114 @@
                                     </button>
                                   </div>
                                   <div class="modal-body">
-                                    <form #f="ngForm"  ngNativeValidate>
-                                      <div *ngFor="let prop of field.properties | keyvalue"  class="form-group">
-                                        <div *ngIf="prop.key!='type'">
-                                          <label for={{prop.key}}>{{prop.key}}</label>
-                                         
-                                            <input type="text" name={{prop.key}} [(ngModel)]="child[prop.key]"  *ngIf="prop.value=='string'" class="form-control" id="{{prop.key}}">
-                                            <input type="checkbox" name={{prop.key}} [(ngModel)]="child[prop.key]"  *ngIf="prop.value=='boolean'" class="form-control" id="{{prop.key}}">
-                                            <input type="number" name={{prop.key}} [(ngModel)]="child[prop.key]"  *ngIf="prop.value=='long'" class="form-control" id="{{prop.key}}">
+                                    <section id="cover" class="min-vh-100">
+                                      <div id="cover-caption">
+                                        <div class="container">
+                                          <div class="row text-blue">
+                                            <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto text-center form p-4">
+                                              <div class="px-2">
+                                                <form #myForm="ngForm"  ngNativeValidate>
+                                                  <div *ngFor="let prop of field.properties | keyvalue"  class="form-group">
+                                                    <div *ngIf="prop.key!='type'">
+                                                      <label for={{prop.key}}>{{prop.key}}</label>
+
+                                                      <input type="text" name={{prop.key}} [(ngModel)]="child[prop.key]"  *ngIf="prop.value=='string'" class="form-control" id="{{prop.key}}">
+                                                      <input type="checkbox" name={{prop.key}} [(ngModel)]="child[prop.key]"  *ngIf="prop.value=='boolean'" class="form-control" id="{{prop.key}}">
+                                                      <input type="number" name={{prop.key}} [(ngModel)]="child[prop.key]"  *ngIf="prop.value=='long'" class="form-control" id="{{prop.key}}">
+                                                    </div>
+                                                  </div>
+                                                </form>
+                                                <button type="button" (click)="addChild(child,field.id);myForm.reset()" class="btn btn-outline-primary">Add</button>
+                                              </div>
+                                            </div>
+                                          </div>
                                         </div>
                                       </div>
-                                    </form>
+                                    </section>
+                                    
+                                    <div>
+                                      <table class="table table-dark" >
+                                        <thead>
+                                          <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col"  *ngFor="let prop of field.properties | keyvalue">{{prop.key}}</th>
+                                            <th scope="col" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr *ngFor="let x of field.value.value; let num = index">
+                                            <th scope="row" >{{num+1}}</th>
+                                            <td *ngFor="let y of x | keyvalue" >{{y.value}}</td>
+                                            <td ><button type="button" class="btn btn-danger" (click)="removeFromList(field.value.value,num)" >Remove</button></td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
                                   </div>
                                   <div class="modal-footer">
-                                    <button type="button" class="btn btn-outline-dark" (click)="modal.close(child)">Save</button>
+                                    <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Close</button>
                                   </div>
                                 </ng-template>
 
-                                <button type="button" class="btn btn-outline-primary" (click)="openChild(contentChild,field.id)" *ngIf="field.properties['type']=='json'">Add</button>
-                                <input type="text" name={{field.id}} [(ngModel)]="field.value.value"  *ngIf="field.properties['type']=='json'" class="form-control" id="{{field.id}}" hidden="true">
+                                <button type="button" class="btn btn-outline-primary" (click)="openChild(contentChild,field.id)" *ngIf="field.type.name.includes('add-children')">Add</button>
+                                <input type="text" name={{field.id}} [(ngModel)]="field.value.value"  *ngIf="field.type.name.includes('add-children')" class="form-control" id="{{field.id}}" hidden="true">
+
+
+
+
+                                <ng-template #contentJsonView let-modal>
+                                  <div class="modal-header">
+                                    <h4 class="modal-title" id="modal-basic-title">{{field.id}}</h4>
+                                    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <div>
+                                      <table class="table table-dark" >
+                                        <thead>
+                                          <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col"  *ngFor="let prop of field.value.value[0] | keyvalue">{{prop.key}}</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr *ngFor="let x of field.value.value; let num = index">
+                                            <th scope="row" >{{num+1}}</th>
+                                            <td *ngFor="let y of x | keyvalue" >{{y.value}}</td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Close</button>
+                                  </div>
+                                </ng-template>
+
+                                <button type="button" class="btn btn-outline-primary" (click)="openJson(contentJsonView)" *ngIf="field.properties['type']=='json' && this.isReadonly(field.validationConstraints)">View</button>
+
 
                                 
+                                
 
-                                <input ng2FileSelect type="file" accept=".pdf" [uploader]="uploader" *ngIf="field.type.name=='string' && field.properties['type']=='file' && !isReadonly(field.validationConstraints)"  (change)="fileSelectionChanged(field)"/>
+                                <input ng2FileSelect type="file" accept=".pdf" [uploader]="uploader" *ngIf="field.type.name=='string' && field.properties['type']=='file' && !isReadonly(field.validationConstraints)"  (change)="fileSelectionChanged(field)" #fileuploader hidden/>
                                 <input type="text" name={{field.id}} [(ngModel)]="field.value.value"   *ngIf="field.type.name=='string' && field.properties['type']=='file' && !isReadonly(field.validationConstraints)" class="form-control" id="{{field.id}}" hidden="true">
+
+                                <div style="width: 420px" *ngIf="field.type.name=='string' && field.properties['type']=='file' && !isReadonly(field.validationConstraints)" > 
+                                  <div class="flex-row file-input">
+                                    <div class="flex-h-50-pct flex-row file-name">
+                                     <div class="flex-h-fill-remaining">
+                                       <div class="truncate">
+                                         {{uploader.queue[0]?.file?.name}}
+                                       </div>
+                                     </div>
+                                   </div>
+                                   <div class="flex-h-50-pct select-button" (click)="chooseFile()">
+                                     Choose File
+                                   </div>
+                                 </div>
+                               </div>
 
 
                                 <ng-template #contentPdf let-modal>
@@ -78,7 +162,7 @@
                                     <ngx-extended-pdf-viewer [src]="src" useBrowserLocale="true" height="70vh"></ngx-extended-pdf-viewer>
                                   </div>
                                   <div class="modal-footer">
-                                    <button type="button" class="btn btn-outline-dark" (click)="modal.close('uspeh')">Save</button>
+                                    <button type="button" class="btn btn-outline-dark" (click)="modal.close('uspeh')">Close</button>
                                   </div>
                                 </ng-template>
 

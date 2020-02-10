@@ -1,0 +1,58 @@
+<div class="darkbackground">
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col md-3"></div>
+            <div class="col md-6 mt-5 mb-5">
+                <h1 class="text-light mb-5">PayPal Donacija</h1>
+
+                <form #form="ngForm" ngNativeValidate (ngSubmit)="onSubmit(form)">
+
+                    <div class="form-group">
+                        <label class="text-light" for="tipCiklusa">Tip ciklusa: </label>
+                        <select name="tipCiklusa" id="tipCiklusa" class="form-control" [(ngModel)]="body.tipCiklusa" required>
+                            <option value="INFINITE">
+                                Infinite
+                            </option>
+                            <option value="FIXED">
+                                Fixed
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" *ngIf="body.tipCiklusa=='FIXED'">
+                        <label class="text-light" for="brojCiklusa">Broj ciklusa: </label>
+                        <input name="brojCiklusa" [(ngModel)]="body.brojCiklusa" id="brojCiklusa" type="number" class="form-control" required/>
+                    </div>
+
+                    <label class="text-light">Period: </label>
+                    <div class="row">
+                        <div class="form-group col">
+                            <input name="brojPeriod" [(ngModel)]="body.ucestalostPerioda" id="brojPeriod" type="number" class="form-control" required/>
+                        </div>
+
+                        <div class="form-group col">
+                            <select name="period" id="period" class="form-control" [(ngModel)]="body.period" required>
+                                <option value="DAY">
+                                    Dan
+                                </option>
+                                <option value="WEEK">
+                                    Nedelja
+                                </option>
+                                <option value="MONTH">
+                                    Mesec
+                                </option>
+                                <option value="YEAR">
+                                    Godina
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button id="submit" [hidden]="hidden" class="btn btn-primary mt-4">Potvrdi</button>
+                    <div [hidden]="!hidden" class="lds-roller mt-3"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                </form>
+            </div>
+            <div class="col md-3"></div>
+        </div>
+    </div>
+</div>

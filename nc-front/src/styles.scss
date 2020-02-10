@@ -21,3 +21,79 @@
 .myCustomModalClass .modal-dialog {
   max-width: 80%;
 }
+
+
+
+.file-input {
+  border-radius: 5px;
+  border: 1px solid #eaeaea;
+  overflow: hidden;
+}
+
+.file-name{
+  padding: 10px 5px;
+}
+
+.select-button{
+   padding: 10px 5px;
+   background: #fafafa;
+   text-align: center;
+   color: #999999;
+   cursor: pointer;
+}
+
+.select-button:hover{
+   background: #cccccc;
+   color: #fafafa;
+}
+
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-h-50-pct{
+  -webkit-flex: 0 0 50% !important; /* Safari 6.1+ */
+  -ms-flex: 0 0 50%  !important; /* IE 10 */
+  flex: 0 0 50% !important;
+  max-width: 50%  !important;
+  min-width: 0;
+  min-height: 0;
+}
+
+.flex-h-10{
+  -webkit-flex: 0 0 10px !important; /* Safari 6.1+ */
+  -ms-flex: 0 0 10px !important; /* IE 10 */
+  flex: 0 0 10px !important;
+  max-width: 10px;
+  width: 10px;
+  min-width: 0;
+  min-height: 0;
+}
+
+.flex-h-fill-remaining{
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+
+.truncate {
+  min-width: 0;
+  position: relative;
+  max-width: 100%;
+
+  & * {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+}
+
+a:hover {
+cursor: pointer;
+
+}
+
+

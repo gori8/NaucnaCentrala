@@ -40,6 +40,8 @@ public class CasopisDTO {
 
     private CasopisStatus casopisStatus = CasopisStatus.WAITING_FOR_INPUT;
 
+    private List<LinkeviDTO> linkevi = new ArrayList<>();
+
 
 
 }

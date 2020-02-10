@@ -1,13 +1,16 @@
 package rs.ac.uns.naucnacentrala.model;
 
 import lombok.*;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -29,7 +32,7 @@ public class Casopis implements Serializable {
 
     private String issn;
 
-    private Long cena;
+    private BigDecimal cena;
 
     private String koPlaca;
 
@@ -78,5 +81,15 @@ public class Casopis implements Serializable {
     private Boolean enabled=false;
 
     private String processInstanceId;
+
+    @Column(name = "uuid", unique = true, nullable = true)
+    @Type(type="org.hibernate.type.UUIDCharType")
+    private UUID uuid;
+
+    @OneToMany(mappedBy = "casopis")
+    protected List<Link> linkovi = new ArrayList<>();
+
+    @OneToMany(mappedBy = "casopis")
+    protected List<Paper> radovi = new ArrayList<>();
 
 }

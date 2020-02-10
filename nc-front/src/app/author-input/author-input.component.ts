@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ScienceJournalService } from '../_services/science-journal/science-journal.service';
 import { BpmnService } from '../_services/bpmn/bpmn.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -28,11 +28,15 @@ export class AuthorInputComponent implements OnInit {
   private uploader: FileUploader;
   private uploadingField;
 
+  @ViewChild('fileuploader',{static: false})
+  fileuploaderVar: ElementRef;
+
+
   ngOnInit() {
 
-    this.uploader= new FileUploader({ url: "http://localhost:8080/restapi/paper", removeAfterUpload: false, authToken: "Bearer " + this.authService.currentUserValue.token});
+    this.uploader= new FileUploader({ url: "https://localhost:8080/restapi/paper", removeAfterUpload: false, authToken: "Bearer " + this.authService.currentUserValue.token});
 
-    
+    console.log(this.uploader);
 
     this.dropdownSettings = {
       singleSelection: false,
@@ -53,7 +57,16 @@ export class AuthorInputComponent implements OnInit {
         this.formFields = res.formFields;
         this.processInstanceID = res.processInstanceId;
         this.formFields.forEach( (field) => {
+          if(field.properties.type=='url'){
+            window.location.href=field.value.value;
+          }
           this.propertyType[field.id]=field.type.name;
+          if(field.type.name.includes('add-children')){
+            field.value.value=JSON.parse(field.value.value);
+          }
+          if(field.properties['type']=='json' && this.isReadonly(field.validationConstraints)){
+                    field.value.value=JSON.parse(field.value.value);
+                  }
           if( field.type.name=='enum'){
             this.enumValues = Object.keys(field.type.values);
           }
@@ -85,14 +98,17 @@ export class AuthorInputComponent implements OnInit {
       });
   }
 
+  addChild(child,fieldID){
+    let field = this.formFields.find(field => field.id==fieldID);
+    let clone = {...child};
+    field.value.value.push(clone);
+    child={};
+  }
+
   openChild(content,fieldID) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-      console.log(result);
-      let field = this.formFields.find(field => field.id==fieldID);
-      field.value.value=[];
-      field.value.value.push(result); 
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title',windowClass : "myCustomModalClass"}).result.then((result) => {
+      
     }, (reason) => {
-      console.log(reason);
     });
   }
 
@@ -116,7 +132,7 @@ export class AuthorInputComponent implements OnInit {
           }
           o.push({fieldId: property, fieldValue: arr})
         }else{
-          if(fieldReset.properties['type']=='json'){
+          if(this.propertyType[property].includes('add-children')){
             value[property] = JSON.stringify(value[property]);
             console.log(value[property]);
           }
@@ -128,8 +144,8 @@ export class AuthorInputComponent implements OnInit {
 
       x.subscribe(
         res => {
-          this.notifierService.notify("success","Bravo Nikso!");
-          this.router.navigate(['pdf']);
+          this.notifierService.notify("info","Podaci su poslati uredniku na proveru");
+          this.router.navigate(['tasks']);
         },
         err => {
           console.log(err);
@@ -159,14 +175,22 @@ export class AuthorInputComponent implements OnInit {
   }
 
   isReadonly(constraints){
-  if(constraints.length!=0){
-    if(constraints[0].name=='readonly')
-      return true;
-    else
+    if(constraints.length!=0){
+      if(constraints[0].name=='readonly')
+        return true;
+      else
+        return false;
+    }else{
       return false;
-  }else{
-    return false;
+    }
   }
-}
+
+  chooseFile(){
+    this.fileuploaderVar.nativeElement.click();
+  }
+
+  removeFromList(list,x){
+    list.splice(x, 1);
+  }
 
 }

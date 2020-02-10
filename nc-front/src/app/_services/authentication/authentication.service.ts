@@ -9,7 +9,7 @@ import { User } from '../../_model/user';
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
 
-    private LOGIN_URL = "http://localhost:8080/restapi/auth/login"
+    private LOGIN_URL = "https://localhost:8080/restapi/auth/login"
 
     private currentUserSubject: BehaviorSubject<User>;
     public currentUser: Observable<User>;

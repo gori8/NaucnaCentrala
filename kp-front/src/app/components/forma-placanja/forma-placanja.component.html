@@ -1,0 +1,81 @@
+<div class="darkbackground"> 
+    <div class="container">
+        <div class="row ml-auto mr-auto">
+            <div class="col col-md-3"></div>
+            <div class="col col-md-6 mt-3">
+            
+                <!--FORM-->
+                <form #paymentForm="ngForm" ngNativeValidate (ngSubmit)="onSubmit(paymentForm)">
+                    <!--IMAGE-->
+                    <img class="img-logo" [src]="image" *ngIf="image!==null"/>
+                    
+                    <!--HEADER-->
+                    <h2 class="mb-3 text-light mt-5">{{header}}</h2>
+                    
+                    <!--INPUTS-->
+                    <div class="row" *ngFor="let r of rows;let i = index">
+                        <div class="form-group col" *ngFor="let item of r.cols">
+                            
+                            <!--IF NOT REQUIRED-->
+                            <ng-container *ngIf="(item.validation !== undefined && item.validation.required != true) || item.validation === undefined">
+                                <label class="text-light" for="{{item.id}}" *ngIf="item.name !== undefined">{{item.name}}: </label>
+                                <input name="{{i}}" [(ngModel)]="item.model" id="{{item.id}}" type="text" class="form-control" pattern="{{item.validation.pattern}}" *ngIf="item.type == 'text'"/>
+                                <select name="{{i}}" [(ngModel)]="item.model" id="{{item.id}}" class="form-control" *ngIf="item.type == 'select'">
+                                    <option *ngFor="let opt of item.options" value="{{opt.value}}">
+                                        {{opt.text}}
+                                    </option>
+                                </select>
+                                <input name="{{i}}" [(ngModel)]="item.model" id="{{item.id}}" class="form-control" type="checkbox" *ngIf="item.type == 'checkbox'">
+                                <input name="{{i}}" [(ngModel)]="item.model" id="{{item.id}}" class="form-control" type="date" *ngIf="item.type == 'date'">
+                                <input name="{{i}}" [(ngModel)]="item.model" id="{{item.id}}" class="form-control" type="email" *ngIf="item.type == 'email'">
+                                <input name="{{i}}" [(ngModel)]="item.model" id="{{item.id}}" class="form-control" type="month" *ngIf="item.type == 'month'">
+                                <input name="{{i}}" [(ngModel)]="item.model" id="{{item.id}}" class="form-control" type="number" *ngIf="item.type == 'number'">
+                                <input name="{{i}}" [(ngModel)]="item.model" id="{{item.id}}" class="form-control" type="password" *ngIf="item.type == 'password'">
+                                <input name="{{i}}" [(ngModel)]="item.model" id="{{item.id}}" class="form-control" type="radio" *ngIf="item.type == 'radio'">
+                                <input name="{{i}}" [(ngModel)]="item.model" id="{{item.id}}" class="form-control" type="range" *ngIf="item.type == 'range'">
+                                <input id="{{item.id}}" class="btn btn-dark" type="reset" *ngIf="item.type == 'reset'">
+                                <input name="{{i}}" [(ngModel)]="item.model" id="{{item.id}}" class="form-control" type="search" *ngIf="item.type == 'search'">
+                                <input name="{{i}}" [(ngModel)]="item.model" id="{{item.id}}" class="form-control" type="tel" *ngIf="item.type == 'tel'">
+                                <input name="{{i}}" [(ngModel)]="item.model" id="{{item.id}}" class="form-control" type="time" *ngIf="item.type == 'time'">
+                                <input name="{{i}}" [(ngModel)]="item.model" id="{{item.id}}" class="form-control" type="week" *ngIf="item.type == 'week'">
+                            </ng-container>
+
+                            <!--IF REQUIRED-->
+                            <ng-container *ngIf="item.validation !== undefined && item.validation.required == true">
+                                <label class="text-light" for="{{item.id}}" *ngIf="item.name !== undefined">{{item.name}}: </label>
+                                <input name="{{i}}" [(ngModel)]="item.model" id="{{item.id}}" type="text" class="form-control" pattern="{{item.validation.pattern}}" *ngIf="item.type == 'text'" required/>
+                                <select name="{{i}}" [(ngModel)]="item.model" id="{{item.id}}" class="form-control" *ngIf="item.type == 'select'" value="{{item.default}}" required>
+                                    <option *ngFor="let opt of item.options" value="{{opt.value}}">
+                                        {{opt.text}}
+                                    </option>
+                                </select>
+                                <input name="{{i}}" [(ngModel)]="item.model" id="{{item.id}}" class="form-control" type="checkbox" *ngIf="item.type == 'checkbox'" required>
+                                <input name="{{i}}" [(ngModel)]="item.model" id="{{item.id}}" class="form-control" type="date" *ngIf="item.type == 'date'" required>
+                                <input name="{{i}}" [(ngModel)]="item.model" id="{{item.id}}" class="form-control" type="email" *ngIf="item.type == 'email'" required>
+                                <input name="{{i}}" [(ngModel)]="item.model" id="{{item.id}}" class="form-control" type="month" *ngIf="item.type == 'month'" required>
+                                <input name="{{i}}" [(ngModel)]="item.model" id="{{item.id}}" class="form-control" type="number" *ngIf="item.type == 'number'" required>
+                                <input name="{{i}}" [(ngModel)]="item.model" id="{{item.id}}" class="form-control" type="password" *ngIf="item.type == 'password'" required>
+                                <input name="{{i}}" [(ngModel)]="item.model" id="{{item.id}}" class="form-control" type="radio" *ngIf="item.type == 'radio'" required>
+                                <input name="{{i}}" [(ngModel)]="item.model" id="{{item.id}}" class="form-control" type="range" *ngIf="item.type == 'range'" required>
+                                <input id="{{item.id}}" class="btn btn-dark" type="reset" *ngIf="item.type == 'reset'" required>
+                                <input name="{{i}}" [(ngModel)]="item.model" id="{{item.id}}" class="form-control" type="search" *ngIf="item.type == 'search'" required>
+                                <input name="{{i}}" [(ngModel)]="item.model" id="{{item.id}}" class="form-control" type="tel" *ngIf="item.type == 'tel'" required>
+                                <input name="{{i}}" [(ngModel)]="item.model" id="{{item.id}}" class="form-control" type="time" *ngIf="item.type == 'time'" required>
+                                <input name="{{i}}" [(ngModel)]="item.model" id="{{item.id}}" class="form-control" type="week" *ngIf="item.type == 'week'" required>
+                            </ng-container>
+
+                        </div>
+                    </div>
+                
+                    <!--BUTTON-->
+                    <button type="submit" class="btn btn-primary mb-3">{{button}}</button>
+
+                </form>
+
+            </div>
+            <div class="col col-md-3"></div>
+        </div>
+    </div>    
+</div>
+
+<script *ngFor="let s of scripts" src="{{s}}"></script>

@@ -1,12 +1,13 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
-      <a class="navbar-brand clicker" routerLink="register" *ngIf="!(currentUser$ | async)">Register</a> 
-      <a class="navbar-brand clicker" routerLink="login" *ngIf="!(currentUser$ | async)">Login</a>
-      <a class="navbar-brand clicker" (click)="newJournal()" *ngIf="(currentUser$ | async)?.role=='ROLE_UREDNIK'">Add New Journal</a>
-      <a class="navbar-brand clicker" routerLink="admin/journals" *ngIf="(currentUser$ | async)?.role=='ROLE_ADMIN'">Activate Journals</a>
-      <a class="navbar-brand clicker" routerLink="admin/users" *ngIf="(currentUser$ | async)?.role=='ROLE_ADMIN'">Activate Reviewers</a>
-      <a class="navbar-brand clicker" routerLink="urednik/journals" *ngIf="(currentUser$ | async)?.role=='ROLE_UREDNIK'">My Journals</a>
-      <a class="navbar-brand clicker" routerLink="admin/register/urednik" *ngIf="(currentUser$ | async)?.role=='ROLE_ADMIN'">Register New Editors</a>
-      <a class="navbar-brand clicker" routerLink="author/select/journal" *ngIf="(currentUser$ | async)?.role=='ROLE_AUTHORS'">Add paper to journal</a>
-      <a class="navbar-brand clicker" routerLink="tasks" *ngIf="(currentUser$ | async)">Tasks</a>
-      <a class="navbar-brand clicker" (click)="logout()" *ngIf="(currentUser$ | async)">Logout</a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary  sticky-top">
+      <a class="nav-item nav-link text-light" routerLink="">Home <span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link text-light" routerLink="register" *ngIf="!(currentUser$ | async)">Register</a> 
+      <a class="nav-item nav-link text-light" routerLink="login" *ngIf="!(currentUser$ | async)">Login</a>
+      <a class="nav-item nav-link text-light" (click)="newJournal()" *ngIf="(currentUser$ | async)?.role=='ROLE_UREDNIK'">Add New Journal</a>
+      <a class="nav-item nav-link text-light" routerLink="admin/journals" *ngIf="(currentUser$ | async)?.role=='ROLE_ADMIN'">Activate Journals</a>
+      <a class="nav-item nav-link text-light" routerLink="admin/users" *ngIf="(currentUser$ | async)?.role=='ROLE_ADMIN'">Activate Reviewers</a>
+      <a class="nav-item nav-link text-light" routerLink="urednik/journals" *ngIf="(currentUser$ | async)?.role=='ROLE_UREDNIK'">My Journals</a>
+      <a class="nav-item nav-link text-light" routerLink="admin/register/urednik" *ngIf="(currentUser$ | async)?.role=='ROLE_ADMIN'">Register New Editors</a>
+      <a class="nav-item nav-link text-light" routerLink="author/select/journal" *ngIf="(currentUser$ | async)?.role=='ROLE_AUTHORS'">Add paper to journal</a>
+      <a class="nav-item nav-link text-light" routerLink="tasks" *ngIf="(currentUser$ | async)">Tasks</a>
+      <a class="nav-item nav-link text-light" (click)="logout()" *ngIf="(currentUser$ | async)">Logout</a>
 </nav>

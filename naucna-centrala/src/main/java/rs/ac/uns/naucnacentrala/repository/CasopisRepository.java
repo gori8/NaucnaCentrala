@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import rs.ac.uns.naucnacentrala.model.Casopis;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface CasopisRepository extends JpaRepository<Casopis,Long> {
 
@@ -16,5 +17,7 @@ public interface CasopisRepository extends JpaRepository<Casopis,Long> {
     public List<Casopis> findByGlavniUrednik(String glavniUrednik);
 
     public List<Casopis> findAllByEnabled(Boolean enabled);
+
+    Casopis findByUuid(UUID uuid);
 
 }

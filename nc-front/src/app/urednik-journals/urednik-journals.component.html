@@ -6,7 +6,10 @@
   <div class="card-body">
     <h5 class="card-title">{{casopis.naziv}}</h5>
     <p class="card-text">Issn: {{casopis.issn}}</p>
-    <button  class="btn btn-primary" (click)="onClick(casopis.processInstanceId)" *ngIf="casopis.casopisStatus=='WAITING_FOR_INPUT'">Activate</button>
+    <button  class="btn btn-primary" (click)="onClick(casopis.processInstanceId)" *ngIf="casopis.casopisStatus=='WAITING_FOR_INPUT' && casopis.linkevi.length==0">Activate</button>
+    <div *ngFor="let link of casopis.linkevi">
+      <button  class="btn btn-primary" (click)="onReg(link.url)">{{link.label}}</button>
+    </div>
   </div>
 </div>
 </div>

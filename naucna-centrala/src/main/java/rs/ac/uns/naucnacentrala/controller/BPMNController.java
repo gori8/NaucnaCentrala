@@ -1,9 +1,13 @@
 package rs.ac.uns.naucnacentrala.controller;
 
+import lombok.val;
 import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.form.FormField;
+import org.camunda.bpm.engine.form.FormFieldValidationConstraint;
+import org.camunda.bpm.engine.form.FormType;
 import org.camunda.bpm.engine.runtime.Execution;
 import org.camunda.bpm.engine.task.Task;
 import org.camunda.bpm.engine.variable.value.BooleanValue;
@@ -108,11 +112,14 @@ public class BPMNController {
         HashMap<String, Object> map = camundaUtils.mapListToDto(dto);
         Task task=taskService.createTaskQuery().taskId(taskId).singleResult();
         String processInstanceId=task.getProcessInstanceId();
+
+        HashMap<String,String> validationMap = formValidation(taskId,map);
+        if(!validationMap.isEmpty()){
+            return ResponseEntity.badRequest().body(validationMap);
+        }
+
         if(task.getAssignee().equals(auth.getName())) {
             formService.submitTaskForm(taskId, map);
-            if(map.get("koautori")!=null) {
-                runtimeService.setVariable(processInstanceId,"koautori", map.get("koautori"));
-            }
         }else{
             return ResponseEntity.status(403).build();
         }
@@ -140,6 +147,67 @@ public class BPMNController {
         }
     }
 
+    private HashMap<String,String> formValidation(String taskId, HashMap<String,Object> dataMap){
+        HashMap<String,String> ret = new HashMap<>();
+        List<FormField> formFields = formService.getTaskFormData(taskId).getFormFields();
+        for(FormField field : formFields){
+            List<FormFieldValidationConstraint> constraints = field.getValidationConstraints();
+            for(FormFieldValidationConstraint constraint : constraints){
+                switch (constraint.getName()) {
+                    case "required": {
+                        if(!dataMap.containsKey(field.getId())){
+                            ret.put(field.getId(),"This field is required");
+                        }
+                        break;
+                    }
+                    case "readonly": {
+                        if(dataMap.containsKey(field.getId())){
+                            ret.put(field.getId(),"This field is readonly");
+                        }
+                        break;
+                    }
+                    case "min": {
+                        Object val = dataMap.get(field.getId());
+                        if(field.getType().getName().equals("long")) {
+                            Long number = Long.valueOf(val.toString());
+                            if (number < Long.valueOf(constraint.getConfiguration().toString())) {
+                                ret.put(field.getId(), "Min value is " + constraint.getConfiguration().toString());
+                            }
+                        }
+                        if(field.getType().getName().equals("string")){
+                            if(val.toString().length() < Long.valueOf(constraint.getConfiguration().toString())){
+                                ret.put(field.getId(),"Min length is "+constraint.getConfiguration().toString());
+                            }
+                        }
+                        break;
+                    }
+                    case "max": {
+                        Object val = dataMap.get(field.getId());
+                        if(field.getType().getName().equals("long")) {
+                            Long number = Long.valueOf(val.toString());
+                            if (number > Long.valueOf(constraint.getConfiguration().toString())) {
+                                ret.put(field.getId(), "Min value is " + constraint.getConfiguration().toString());
+                            }
+                        }
+                        if(field.getType().getName().equals("string")){
+                            if(val.toString().length() > Long.valueOf(constraint.getConfiguration().toString())){
+                                ret.put(field.getId(),"Min length is "+constraint.getConfiguration().toString());
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        if(!ret.isEmpty()) {
+            ret.put("taskID", taskId);
+        }
+
+        return ret;
+
+    }
+
     @PreAuthorize("hasRole('UREDNIK') or hasRole('AUTHORS')")
     @RequestMapping(method = RequestMethod.GET, value = "/task/active/{processInstanceId}")
     public ResponseEntity getActiveTask(@PathVariable String processInstanceId) {
@@ -152,7 +220,7 @@ public class BPMNController {
             if (task.getAssignee().equals(auth.getName())) {
                 return ResponseEntity.ok().body(camundaUtils.createFormDTO(task, processInstanceId));
             } else {
-                return ResponseEntity.status(403).build();
+                return ResponseEntity.status(404).build();
             }
         }else{
             return ResponseEntity.status(404).build();
@@ -201,13 +269,23 @@ public class BPMNController {
             TaskDTO taskDTO = new TaskDTO();
             taskDTO.setName(task.getName());
             taskDTO.setTaskId(task.getId());
-            String rad=runtimeService.getVariable(task.getProcessInstanceId(),"naslov").toString();
+            Object naslovVal = runtimeService.getVariable(task.getProcessInstanceId(),"naslov");
+            if(naslovVal==null){
+                continue;
+            }
+            String rad = naslovVal.toString();
             taskDTO.setRad(rad);
             taskDTO.setProcessInstanceId(task.getProcessInstanceId());
             ret.add(taskDTO);
         }
 
         return ResponseEntity.ok().body(ret);
+    }
+
+    private void addSpecialProcessVariables(Map<String,Object> map,String processInstanceId){
+        if(map.get("koautori")!=null) {
+            System.out.println(runtimeService.getVariable(processInstanceId,"koautori"));
+        }
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/tasks/{id}")

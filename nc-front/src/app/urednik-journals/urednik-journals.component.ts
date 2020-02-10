@@ -32,4 +32,9 @@ export class UrednikJournalsComponent implements OnInit {
     this.router.navigate(['journal/activate',processInstanceId]);
   }
 
+  onReg(url){
+    console.log("Reg URL :",url);
+    window.location.href = url;
+  }
+
 }

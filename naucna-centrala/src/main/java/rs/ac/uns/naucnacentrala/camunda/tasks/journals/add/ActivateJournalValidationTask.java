@@ -8,10 +8,12 @@ import rs.ac.uns.naucnacentrala.camunda.service.JournalService;
 import rs.ac.uns.naucnacentrala.dto.CasopisDTO;
 import rs.ac.uns.naucnacentrala.model.Casopis;
 import rs.ac.uns.naucnacentrala.model.CasopisStatus;
+import rs.ac.uns.naucnacentrala.model.Link;
 import rs.ac.uns.naucnacentrala.model.User;
 import rs.ac.uns.naucnacentrala.repository.CasopisRepository;
 import rs.ac.uns.naucnacentrala.repository.UserRepository;
 import rs.ac.uns.naucnacentrala.service.CasopisService;
+import rs.ac.uns.naucnacentrala.service.PaymentService;
 import rs.ac.uns.naucnacentrala.utils.ObjectMapperUtils;
 
 import javax.validation.ConstraintViolation;
@@ -30,6 +32,9 @@ public class ActivateJournalValidationTask implements JavaDelegate {
 
     @Autowired
     CasopisRepository casopisRepository;
+
+    @Autowired
+    PaymentService paymentService;
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
@@ -58,8 +63,17 @@ public class ActivateJournalValidationTask implements JavaDelegate {
                 casopis.setCasopisStatus(CasopisStatus.WAITING_FOR_APPROVAL);
                 casopisRepository.save(casopis);
             }
+
         }
         execution.setVariable("flag_val",flag_val);
+        paymentService.createLinks(casopis.getId());
+        for(Link link : casopis.getLinkovi()){
+            if(!link.getCompleted()){
+                casopis.setCasopisStatus(CasopisStatus.WAITING_FOR_INPUT);
+                casopisRepository.save(casopis);
+                break;
+            }
+        }
     }
 
 }

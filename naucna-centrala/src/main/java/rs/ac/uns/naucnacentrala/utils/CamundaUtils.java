@@ -9,7 +9,6 @@ import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
@@ -21,6 +20,7 @@ import rs.ac.uns.naucnacentrala.dto.KoautorDTO;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Component
@@ -51,12 +51,28 @@ public class CamundaUtils {
     {
         HashMap<String, Object> map = new HashMap<String, Object>();
         for(FormSubmissionDto temp : list){
+            /*Object tempo = temp.getFieldValue();
+            if(temp.getFieldValue()!=null) {
+                if(temp.getFieldValue() instanceof LinkedHashMap){
+                    tempo = tempo.toString().replaceAll("=", ":");
+                }
+            }*/
             //String escaped=temp.getFieldValue().toString().replaceAll("\"","\\\\\"");
+            //escaped=escaped.replaceFirst("\\{","\"");
+            //escaped=replaceLast(escaped,"}","\"");
+            /*if(temp.getFieldId().equals("coauthors")) {
+                //escaped = escaped.substring(2, escaped.length() - 2);
+                escaped="stagod";
+            }*/
             System.out.println(temp.getFieldId()+":   "+temp.getFieldValue());
             map.put(temp.getFieldId(), temp.getFieldValue());
         }
 
         return map;
+    }
+
+    private String replaceLast(String text, String regex, String replacement) {
+        return text.replaceFirst("(?s)(.*)" + regex, "$1" + replacement);
     }
 
     public Task startProcess(String processKey) {
