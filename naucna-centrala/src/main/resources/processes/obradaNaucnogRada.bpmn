@@ -604,7 +604,7 @@ execution.setVariable("oneUser",execution.getVariable("author"));</camunda:scrip
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_1enq9oj" sourceRef="mail_odbijeno_skroz" targetRef="EndEvent_0ozm4w7" />
     <bpmn:endEvent id="EndEvent_0tsoxxy">
-      <bpmn:incoming>SequenceFlow_0r9srh8</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0fi7xh8</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:exclusiveGateway id="ExclusiveGateway_0mu582b" default="SequenceFlow_0ejmgre">
       <bpmn:incoming>SequenceFlow_098ixag</bpmn:incoming>
@@ -889,9 +889,8 @@ execution.setVariable("oneUser",execution.getVariable("author"));</camunda:scrip
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0rfnp3u</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_0b6l3up</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_0d47d6t</bpmn:outgoing>
     </bpmn:sendTask>
-    <bpmn:sequenceFlow id="SequenceFlow_0b6l3up" sourceRef="mail_potvrda_skroz" targetRef="indeksiranje" />
     <bpmn:sequenceFlow id="SequenceFlow_0e0v7mp" sourceRef="ExclusiveGateway_1vy0af5" targetRef="ExclusiveGateway_1pxbytu" />
     <bpmn:exclusiveGateway id="ExclusiveGateway_1gb9w2e">
       <bpmn:incoming>SequenceFlow_0sqyo6q</bpmn:incoming>
@@ -943,15 +942,13 @@ execution.setVariable("oneUser",execution.getVariable("author"));</camunda:scrip
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="SequenceFlow_0bu7w9f" sourceRef="IntermediateThrowEvent_1sztm7x" targetRef="ExclusiveGateway_14l1qxo" />
-    <bpmn:sequenceFlow id="SequenceFlow_0xdz0lc" sourceRef="indeksiranje" targetRef="dodeljivanje_doi" />
-    <bpmn:serviceTask id="indeksiranje" name="Indeksiranje" camunda:expression="wtv">
-      <bpmn:incoming>SequenceFlow_0b6l3up</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_0xdz0lc</bpmn:outgoing>
+    <bpmn:serviceTask id="indeksiranje" name="Indeksiranje" camunda:class="rs.ac.uns.naucnacentrala.camunda.tasks.papers.PaperIndexing">
+      <bpmn:incoming>SequenceFlow_0lqvymk</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0fi7xh8</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_0r9srh8" sourceRef="dodeljivanje_doi" targetRef="EndEvent_0tsoxxy" />
     <bpmn:serviceTask id="dodeljivanje_doi" name="Dodeljivanje DOI-a i cuvanje casopisa" camunda:class="rs.ac.uns.naucnacentrala.camunda.tasks.papers.SavePaperTask">
-      <bpmn:incoming>SequenceFlow_0xdz0lc</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_0r9srh8</bpmn:outgoing>
+      <bpmn:incoming>SequenceFlow_0d47d6t</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0lqvymk</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_02n4u7g" sourceRef="Task_1rtl2rr" targetRef="konacna_odluka_pon" />
     <bpmn:sendTask id="Task_1rtl2rr" name="Obavesti urednika o izmenama" camunda:class="rs.ac.uns.naucnacentrala.camunda.tasks.papers.MailSendTask">
@@ -1020,6 +1017,9 @@ execution.setVariable("oneUser",execution.getVariable("urednik_no"));</camunda:s
     <bpmn:sequenceFlow id="SequenceFlow_0671nil" sourceRef="ExclusiveGateway_0sot5q2" targetRef="SubProcess_0pwebri" />
     <bpmn:sequenceFlow id="SequenceFlow_12kv9yx" sourceRef="SubProcess_0pwebri" targetRef="ExclusiveGateway_15oiyvc" />
     <bpmn:sequenceFlow id="SequenceFlow_1kzsyb3" sourceRef="ExclusiveGateway_18i9e56" targetRef="get_aau_id" />
+    <bpmn:sequenceFlow id="SequenceFlow_0d47d6t" sourceRef="mail_potvrda_skroz" targetRef="dodeljivanje_doi" />
+    <bpmn:sequenceFlow id="SequenceFlow_0lqvymk" sourceRef="dodeljivanje_doi" targetRef="indeksiranje" />
+    <bpmn:sequenceFlow id="SequenceFlow_0fi7xh8" sourceRef="indeksiranje" targetRef="EndEvent_0tsoxxy" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="obradaNaucnogRada">
@@ -1539,10 +1539,6 @@ execution.setVariable("oneUser",execution.getVariable("urednik_no"));</camunda:s
       <bpmndi:BPMNShape id="SendTask_0ad21hj_di" bpmnElement="mail_potvrda_skroz">
         <dc:Bounds x="930" y="2500" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="SequenceFlow_0b6l3up_di" bpmnElement="SequenceFlow_0b6l3up">
-        <di:waypoint x="930" y="2540" />
-        <di:waypoint x="840" y="2540" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0e0v7mp_di" bpmnElement="SequenceFlow_0e0v7mp">
         <di:waypoint x="1245" y="2340" />
         <di:waypoint x="1200" y="2340" />
@@ -1597,19 +1593,11 @@ execution.setVariable("oneUser",execution.getVariable("urednik_no"));</camunda:s
         <di:waypoint x="2920" y="2960" />
         <di:waypoint x="2185" y="2960" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_0xdz0lc_di" bpmnElement="SequenceFlow_0xdz0lc">
-        <di:waypoint x="740" y="2540" />
-        <di:waypoint x="680" y="2540" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_0cd6411_di" bpmnElement="indeksiranje">
-        <dc:Bounds x="740" y="2500" width="100" height="80" />
+        <dc:Bounds x="560" y="2500" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="SequenceFlow_0r9srh8_di" bpmnElement="SequenceFlow_0r9srh8">
-        <di:waypoint x="580" y="2540" />
-        <di:waypoint x="458" y="2540" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_04h6las_di" bpmnElement="dodeljivanje_doi">
-        <dc:Bounds x="580" y="2500" width="100" height="80" />
+        <dc:Bounds x="750" y="2500" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_02n4u7g_di" bpmnElement="SequenceFlow_02n4u7g">
         <di:waypoint x="2010" y="2740" />
@@ -1661,6 +1649,18 @@ execution.setVariable("oneUser",execution.getVariable("urednik_no"));</camunda:s
         <di:waypoint x="2355" y="420" />
         <di:waypoint x="2520" y="420" />
         <di:waypoint x="2520" y="500" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0d47d6t_di" bpmnElement="SequenceFlow_0d47d6t">
+        <di:waypoint x="930" y="2540" />
+        <di:waypoint x="850" y="2540" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0lqvymk_di" bpmnElement="SequenceFlow_0lqvymk">
+        <di:waypoint x="750" y="2540" />
+        <di:waypoint x="660" y="2540" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0fi7xh8_di" bpmnElement="SequenceFlow_0fi7xh8">
+        <di:waypoint x="560" y="2540" />
+        <di:waypoint x="458" y="2540" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

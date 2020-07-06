@@ -34,7 +34,7 @@ export class AuthorInputComponent implements OnInit {
 
   ngOnInit() {
 
-    this.uploader= new FileUploader({ url: "https://localhost:8080/restapi/paper", removeAfterUpload: false, authToken: "Bearer " + this.authService.currentUserValue.token});
+    this.uploader= new FileUploader({ url: "http://localhost:8080/restapi/paper", removeAfterUpload: false, authToken: "Bearer " + this.authService.currentUserValue.token});
 
     console.log(this.uploader);
 

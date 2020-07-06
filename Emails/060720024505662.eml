@@ -1,0 +1,23 @@
+        Mon, 06 Jul 2020 02:45:05 +0200 (CEST)
+Date: Mon, 6 Jul 2020 02:45:05 +0200 (CEST)
+From: naucna.centrala@upp.com
+To: urednik1@gmail.com
+Message-ID: <1192360650.2.1593996305656@antolovic-Lenovo-Legion-Y530-15ICH>
+Subject: Naucna Centrala registration confirmation
+MIME-Version: 1.0
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_0_1348156921.1593996305599"
+
+------=_Part_0_1348156921.1593996305599
+Content-Type: multipart/related; 
+	boundary="----=_Part_1_1636664122.1593996305602"
+
+------=_Part_1_1636664122.1593996305602
+Content-Type: text/html; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+
+<a href="http://localhost:8080/restapi/registration/complete/708">Click to confirm your registration</a>
+
+------=_Part_1_1636664122.1593996305602--
+
+------=_Part_0_1348156921.1593996305599--

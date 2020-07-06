@@ -73,6 +73,8 @@ public class SavePaperTask implements JavaDelegate {
         casopis.getRadovi().add(paper);
         casopisRepository.save(casopis);
 
+        execution.setVariable("paperId",paper.getId());
+
         String coauthorsJson = execution.getVariable("coauthors").toString();
 
         ArrayList<KoautorDTO> koautorDTOList = objectMapper.readValue(coauthorsJson,new TypeReference<ArrayList<KoautorDTO>>(){});

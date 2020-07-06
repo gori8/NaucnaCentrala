@@ -66,14 +66,14 @@ public class ActivateJournalValidationTask implements JavaDelegate {
 
         }
         execution.setVariable("flag_val",flag_val);
-        paymentService.createLinks(casopis.getId());
+        /*paymentService.createLinks(casopis.getId());
         for(Link link : casopis.getLinkovi()){
             if(!link.getCompleted()){
                 casopis.setCasopisStatus(CasopisStatus.WAITING_FOR_INPUT);
                 casopisRepository.save(casopis);
                 break;
             }
-        }
+        }*/
     }
 
 }

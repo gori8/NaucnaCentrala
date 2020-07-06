@@ -8,7 +8,7 @@ public class StorageProperties {
 	/**
 	 * Folder location for storing files
 	 */
-	private String location = "/home/antolovic/pdfs";
+	private String location = "/hdd/pdfs";
 
 	public String getLocation() {
 		return location;

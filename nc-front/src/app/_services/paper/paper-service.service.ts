@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient,  HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-const BASE_CONTROLLER_URL = "https://localhost:8080/restapi/paper"
+const BASE_CONTROLLER_URL = "http://localhost:8080/restapi/paper"
 
 @Injectable({
   providedIn: 'root'

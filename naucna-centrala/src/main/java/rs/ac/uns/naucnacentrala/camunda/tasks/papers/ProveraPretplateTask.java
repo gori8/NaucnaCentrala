@@ -32,13 +32,15 @@ public class ProveraPretplateTask implements JavaDelegate {
         CasopisPV casopisPV = (CasopisPV) execution.getVariable("casopis");
         Casopis casopis = casopisRepository.getOne(casopisPV.getId());
         User autor = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        if(autor.getKupljeniCasopisi().contains(casopis)){
+        /*if(autor.getKupljeniCasopisi().contains(casopis)){
             execution.setVariable("autor_pretplacen",true);
         }else{
             execution.setVariable("autor_pretplacen",false);
             String url = paymentService.getRedirectUrl(casopis.getUuid().toString(),autor.getUsername(),execution.getProcessInstanceId());
             execution.setVariable("urlToPay",url);
-        }
+        }*/
+        execution.setVariable("autor_pretplacen",true);
+
     }
 
 }

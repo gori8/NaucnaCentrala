@@ -119,7 +119,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	public RestTemplate restTemplate() throws Exception{
-		KeyStore clientStore = KeyStore.getInstance("JKS");
+		/*KeyStore clientStore = KeyStore.getInstance("JKS");
 		clientStore.load(new FileInputStream("src/main/resources/identity.jks"), "secret".toCharArray());
 		KeyStore trustStore = KeyStore.getInstance("JKS");
 		trustStore.load(new FileInputStream("src/main/resources/truststore.jks"), "secret".toCharArray());
@@ -136,7 +136,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
 		requestFactory.setConnectTimeout(10000); // 10 seconds
 		requestFactory.setReadTimeout(10000); // 10 seconds
-		return new RestTemplate(requestFactory);
+		return new RestTemplate(requestFactory);*/
+		return new RestTemplate();
 	}
 
 
