@@ -98,6 +98,10 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "casopis_id", referencedColumnName = "id"))
     private List<Casopis> kupljeniCasopisi = new ArrayList<>();
 
+    private float lat;
+
+    private float lng;
+
 
 
     @Override

@@ -38,4 +38,8 @@ public class Coauthor {
 
     private String authorUsername;
 
+    private float lat;
+
+    private float lng;
+
 }

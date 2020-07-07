@@ -10,9 +10,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.naucnacentrala.dto.ComplexSearchDTO;
+import rs.ac.uns.naucnacentrala.dto.ReviewerSearchDTO;
 import rs.ac.uns.naucnacentrala.dto.SearchDTO;
 import rs.ac.uns.naucnacentrala.service.SearchService;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -34,6 +36,18 @@ public class SearchController {
     @RequestMapping(method = RequestMethod.POST, value = "/advanced")
     public ResponseEntity advancedSearch(@RequestBody ComplexSearchDTO searchDTO)  {
         return ResponseEntity.ok(searchService.advancedSearch(searchDTO));
+    }
+
+    @PreAuthorize("hasRole('UREDNIK')")
+    @RequestMapping(method = RequestMethod.POST, value = "/reviewers")
+    public ResponseEntity reviewersSearch(@RequestBody ReviewerSearchDTO searchDTO) throws IOException {
+        return ResponseEntity.ok(searchService.reviewersSearch(searchDTO));
+    }
+
+
+    @RequestMapping(method = RequestMethod.GET, value = "/reviewers/test/{authorUsername}/{pdfPath}")
+    public ResponseEntity reviewersSearchTest(@PathVariable String authorUsername, @PathVariable String pdfPath) throws IOException {
+        return ResponseEntity.ok(searchService.reviewersSearchTest(authorUsername,pdfPath));
     }
 
 }

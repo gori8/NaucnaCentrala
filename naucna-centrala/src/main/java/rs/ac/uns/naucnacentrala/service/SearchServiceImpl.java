@@ -1,6 +1,12 @@
 package rs.ac.uns.naucnacentrala.service;
 
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
+import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.runtime.Execution;
+import org.camunda.bpm.engine.task.Task;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MoreLikeThisQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -18,7 +24,12 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.naucnacentrala.dto.*;
 import rs.ac.uns.naucnacentrala.elasticsearch.model.ESPaper;
 import rs.ac.uns.naucnacentrala.elasticsearch.repository.ESPaperRepository;
+import rs.ac.uns.naucnacentrala.model.User;
+import rs.ac.uns.naucnacentrala.repository.UserRepository;
+import rs.ac.uns.naucnacentrala.utils.uploadingfiles.storage.StorageService;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +42,18 @@ public class SearchServiceImpl implements SearchService{
 
     @Autowired
     ElasticsearchRestTemplate operations;
+
+    @Autowired
+    TaskService taskService;
+
+    @Autowired
+    RuntimeService runtimeService;
+
+    @Autowired
+    StorageService storageService;
+
+    @Autowired
+    UserRepository userRepository;
 
 
     @Override
@@ -45,9 +68,7 @@ public class SearchServiceImpl implements SearchService{
                 .withHighlightFields(new HighlightBuilder.Field(searchDTO.getField()))
                 .build();
 
-        //MoreLikeThisQueryBuilder.Item items[] = new MoreLikeThisQueryBuilder.Item[1];
-        //items[0] = new MoreLikeThisQueryBuilder.Item("naucni_rad","1");
-        //QueryBuilders.moreLikeThisQuery(new String[]{"sadrzaj","apstrakt"},null,items);
+
 
         SearchHits<ESPaper> searchHits = operations.search(searchQuery,
                 ESPaper.class,
@@ -193,6 +214,81 @@ public class SearchServiceImpl implements SearchService{
         }
 
         return results;
+    }
+
+    @Override
+    public List<ReviewerSearchResultDTO> reviewersSearch(ReviewerSearchDTO searchDTO) throws IOException {
+        Task task=taskService.createTaskQuery().taskId(searchDTO.getTaskId()).singleResult();
+        String processInstanceId=task.getProcessInstanceId();
+        String authorUsername = (String)runtimeService.getVariable(processInstanceId, "author");
+        User author = userRepository.findByUsername(authorUsername);
+
+        String pdfPath = runtimeService.getVariable(processInstanceId,"pdf").toString();
+
+        File f = storageService.loadAsResource(pdfPath).getFile();
+        PDDocument pdDoc = PDDocument.load(f);
+        String parsedText = new PDFTextStripper().getText(pdDoc);
+
+        String sadrzaj = parsedText.replace("\n"," ");
+
+        BoolQueryBuilder rootQuery = QueryBuilders.boolQuery();
+
+        if(searchDTO.isGeoLoc()){
+            QueryBuilder queryBuilder = QueryBuilders.geoDistanceQuery("reviewers.location").distance("100km").point(author.getLat(),author.getLng());
+            rootQuery.mustNot(queryBuilder);
+        }
+
+        Iterable<ESPaper> papersResult = esPaperRepository.search(rootQuery);
+
+        System.out.println("----------------------------RESULTS----------------------------");
+        for(ESPaper paper : papersResult){
+            System.out.println("--------------------START-------------------------------");
+            System.out.println(paper);
+            System.out.println("---------------------END-------------------------------");
+        }
+
+
+
+        return null;
+    }
+
+    @Override
+    public List<ReviewerSearchResultDTO> reviewersSearchTest(String authorUsername, String pdfPath) throws IOException {
+        User author = userRepository.findByUsername(authorUsername);
+
+
+        File f = storageService.loadAsResource(pdfPath).getFile();
+        PDDocument pdDoc = PDDocument.load(f);
+        String parsedText = new PDFTextStripper().getText(pdDoc);
+
+        String sadrzaj = parsedText.replace("\n"," ");
+
+
+        BoolQueryBuilder rootQuery = QueryBuilders.boolQuery();
+
+        //QueryBuilder queryBuilder = QueryBuilders.geoDistanceQuery("reviewers.location").distance("100km").point(author.getLat(),author.getLng());
+        //rootQuery.mustNot(queryBuilder);
+
+
+        //MoreLikeThisQueryBuilder.Item item = new MoreLikeThisQueryBuilder.Item();
+
+        QueryBuilder moreLikeThisQuery = QueryBuilders.moreLikeThisQuery(new String[]{"sadrzaj"},new String[]{sadrzaj},null).minDocFreq(1).minTermFreq(1);
+
+
+
+
+        Iterable<ESPaper> papersResult = esPaperRepository.search(moreLikeThisQuery);
+
+        System.out.println("----------------------------RESULTS----------------------------");
+        for(ESPaper paper : papersResult){
+            System.out.println("--------------------START-------------------------------");
+            System.out.println(paper);
+            System.out.println("---------------------END-------------------------------");
+        }
+
+
+
+        return null;
     }
 
 

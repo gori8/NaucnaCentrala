@@ -11,6 +11,7 @@ import org.springframework.data.elasticsearch.annotations.Setting;
 import rs.ac.uns.naucnacentrala.model.Casopis;
 
 import javax.persistence.*;
+import java.util.List;
 
 @ToString
 @Document(indexName = "naucni_rad")
@@ -38,6 +39,9 @@ public class ESPaper {
     private String autori;
 
     private String filename;
+
+    @Field( type = FieldType.Nested)
+    private List<ESRecenzent> reviewers;
 
 
 }
