@@ -1,13 +1,59 @@
 <section id="cover" class="min-vh-100">
-    <div id="cover-caption">
-        <div class="container">
-            <div class="row text-primary">
-                <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto text-center form p-4">
-                    <div class="px-2">
-                        <h1 class="display-2">Welcome to Naučna Centrala</h1>
-                      </div>
+  <div id="cover-caption">
+    <div class="container">
+      <div class="row text-primary">
+        <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto text-center form p-4">
+          <div class="px-2">
+
+            <h1 class="display-2" *ngIf="(currentUser$ | async)?.role!='ROLE_USER'">Welcome to Naučna Centrala</h1>
+
+            <div *ngIf="(currentUser$ | async)?.role=='ROLE_USER'">
+
+              <div class="input-group" >
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="inputGroupSelect01">Pretraži po: </label>
                 </div>
+                <select class="custom-select" id="inputGroupSelect01" [(ngModel)]="searchByVal">
+                  <option value="naslov" selected>
+                    naslovu
+                  </option>
+                  <option value="apstrakt">
+                    apstraktu
+                  </option>
+                  <option value="kljucniPojmovi">
+                    ključnim pojmovima
+                  </option>
+                  <option value="naucnaOblast">
+                    naučnoj oblasti
+                  </option>
+                  <option value="sadrzaj">
+                    sadržaju
+                  </option>
+                  <option value="autori">
+                    autorima
+                  </option>
+                </select>
+              </div>
+
+              <div class="input-group" style="margin-top: 10px;">
+                <input class="form-control search" placeholder="Search..." type="text" name="search_bar" [(ngModel)]="searchTextVal"  id="search_bar">
+              </div>
+              
+              
+              <div class="container" style="margin-top: 40px;">
+                <div class="row">
+                  <div class="col-sm">
+                      <button class="btn btn-primary btn-block" [routerLink]="'search/'+searchByVal+'/'+searchTextVal">Pretraži     <i class="fa fa-search"></i></button>
+                  </div>
+                  <div class="col-sm">
+                      <button class="btn btn-secondary btn-block" routerLink="advanced/search">Napredna pretraga</button>
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </section>

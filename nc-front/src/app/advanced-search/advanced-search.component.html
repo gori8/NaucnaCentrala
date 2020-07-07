@@ -1,0 +1,157 @@
+<div class="container">
+  <div class="row">
+    <div class="col sm-4">
+      <div class="row mt-5" *ngIf="!resultsShown">
+        <div class="col sm-12" >
+          <div class="row">
+            <div class="col sm-12">
+              <label class="text-dark" for="boolQuery">Bulov upit</label>
+            </div>
+          </div>
+          <div class="form-inline" style="margin-bottom: 4em">
+            <div class="form-group">
+          <button (click)=addGroup() name="boolQuery" id="boolQuery" class="btn btn-dark">Dodaj grupu</button>
+        </div>
+        <div class="form-group">
+          <button (click)=removeGroup() name="boolQuery" id="boolQuery" class="btn btn-danger ml-3">Izbriši grupu</button>
+        </div>
+        <div class="form-group">
+                              <label for="selectBoolOperator" style="margin-left: 2em;margin-right: 0.5em;">Operator između grupa:</label>
+          <select  [(ngModel)]="boolQueryGroups.operator" class="selectpicker form-control" id="selectBoolOperator">
+                <option value="AND">
+                  AND
+                </option>
+                <option value="OR">
+                  OR
+                </option>
+              </select>
+            </div>
+            </div>
+          <ng-container *ngFor="let group of boolQueryGroups.groups; let i = index" style="margin-top: 4em;">
+
+            <div class="operator" *ngIf="i!=0">
+              <p>{{boolQueryGroups.operator}}</p>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <div class="form-inline">
+                  <div class="form-group">
+                    <button (click)="addElement(group)" class="btn btn-success"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                  </div>
+                  <div class="form-group">
+                    <button (click)="removeElement(group)" class="btn btn-danger ml-3"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                  </div>
+                  <div class="form-group">
+                    <label for="id_select" style="margin-left: 2em;margin-right: 0.5em;">Tip grupe:</label>
+                    <select [(ngModel)]="group.type" class="form-control" (change)='onGroupTypeChanged(group)' id="id_select">
+                      <option value="AND">
+                        AND
+                      </option>
+                      <option value="OR">
+                        OR
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            <div class="card-body" >
+
+              <ng-container *ngFor="let element of group.elements; let j = index" style="margin-top: 4em">
+
+                <div class="operator" *ngIf="j!=0">
+                  <p>{{group.type}}</p>
+                </div>
+
+                <div class="row">
+                  <div class="col sm-6">
+                    <label *ngIf="j==0" class="text-dark" for="field">Polje</label>
+                    <select class="form-control" name="field" id="field" [(ngModel)]="element.field">
+                      <option value="naslov">
+                        NASLOV
+                      </option>
+                      <option value="apstrakt">
+                        APSTRAKT
+                      </option>
+                      <option value="kljucniPojmovi">
+                        KLJUČNI POJMOVI
+                      </option>
+                      <option value="naucnaOblast">
+                        NAUČNA OBLAST
+                      </option>
+                      <option value="sadrzaj">
+                        SADRŽAJ
+                      </option>
+                      <option value="autori">
+                        AUTOR
+                      </option>
+                    </select>
+                  </div>
+                  <div class="col sm-6">
+                    <label *ngIf="j==0" class="text-dark" for="value">Vrednost</label>
+                    <input name="search_value" id="search_value" type="text" class="form-control" [(ngModel)]="element.searchText"/>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+
+        </ng-container>
+
+        <button *ngIf="boolQueryGroups.groups.length != 0" (click)="executeBool()" class="btn btn-primary mt-2">Postavi Bulov upit</button>
+
+      </div>
+
+      
+    </div>
+    <div class="row mt-5" *ngIf="resultsShown">
+      <div class="col sm-12">
+        <div >
+
+
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-md-8 left-side-sidebar">
+                <div class="row text-center">
+                  <div class="col-md-12">
+                    <div class="v-heading-v2">
+                      <h4 class="v-search-result-count">About 18,580 results</h4>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="clearfix mt-40">
+                  <ul class="xsearch-items">
+                    <li class="search-item" *ngFor="let result of results">
+                      <div class="search-item-img">
+                        <a href="#">
+                          <img src="assets/img/paper.png" width="70" height="70">
+                        </a>
+                      </div>
+                      <div class="search-item-content">
+                        <h3 class="search-item-caption"><a [routerLink]="'/showpdf/'+result.filepath">{{result.naslov}}</a></h3>
+
+                        <div class="search-item-meta mb-15">
+                          <ul class="list-inline">
+                            <li >Naučna oblast: {{result.naucnaOblast}}</li>
+                            <li >Autori: {{result.autori}}</li>
+                          </ul>
+                        </div>
+                        <div *ngFor="let sazetak of result.dynamicHighlights">
+                          <div class="dynamic-highlights" [innerHTML]="sazetak.sazetak"></div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+

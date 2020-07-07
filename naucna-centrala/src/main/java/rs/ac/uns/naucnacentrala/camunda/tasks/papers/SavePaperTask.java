@@ -58,7 +58,7 @@ public class SavePaperTask implements JavaDelegate {
         String naslov = execution.getVariable("naslov").toString();
         String apstrakt = execution.getVariable("apstrakt").toString();
         String kljucniPojmovi = execution.getVariable("kljucni_pojmovi").toString();
-        String pdfPath = this.rootLocation.toString() + "/" + execution.getVariable("pdf").toString();
+        String pdfPath = execution.getVariable("pdf").toString();
         Long noId = Long.valueOf(execution.getVariable("naucna_oblast").toString());
 
         Paper paper = new Paper();
@@ -68,6 +68,7 @@ public class SavePaperTask implements JavaDelegate {
         paper.setPdfPath(pdfPath);
         paper.setNaucnaOblastId(noId);
         paper.setCasopis(casopis);
+        paper.setAuthorUsername(authorUsername);
         paper = paperRepository.save(paper);
 
         casopis.getRadovi().add(paper);

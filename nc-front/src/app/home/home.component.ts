@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NotifierService } from "angular-notifier";
-
+import { AuthenticationService } from '../_services/authentication/authentication.service';
+import { Observable } from 'rxjs';
+import { User } from '../_model/user';
 
 @Component({
   selector: 'app-home',
@@ -9,9 +11,16 @@ import { NotifierService } from "angular-notifier";
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private notifierService: NotifierService) { }
+  currentUser$: Observable<User>;
+
+  searchByVal="naslov";
+
+  constructor(private authenticationService : AuthenticationService) { 
+    this.currentUser$=this.authenticationService.currentUser;
+  }
 
   ngOnInit() {
+
   }
 
 }

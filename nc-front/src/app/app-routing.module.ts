@@ -17,25 +17,30 @@ import { AuthorInputComponent } from './author-input/author-input.component';
 import { ShowPdfComponent } from './show-pdf/show-pdf.component';
 import { UserTasksComponent } from './user-tasks/user-tasks.component';
 import { ActiveTaskComponent } from './active-task/active-task.component';
-
+import { AdvancedSearchComponent } from './advanced-search/advanced-search.component';
+import { UserGuard } from './_guards/user.guard';
+import { SearchResultComponentComponent } from './search-result-component/search-result-component.component';
 
 const routes: Routes = [
-	{ path: '', component: HomeComponent },
+  { path: '', component: HomeComponent },
   { path: 'reg/success', component: SuccessPageComponent },
-	{ path: 'journal/activate/:processInstanceID', component: ActivateJournalComponent, canActivate: [AuthGuard] },
-	{ path: 'journal/add', component: AddJournalComponent, canActivate: [AuthGuard] },
+  { path: 'journal/activate/:processInstanceID', component: ActivateJournalComponent, canActivate: [AuthGuard] },
+  { path: 'journal/add', component: AddJournalComponent, canActivate: [AuthGuard] },
   { path: 'urednik/journals', component: UrednikJournalsComponent, canActivate: [AuthGuard] },
-	{ path: 'admin/journals', component: AdminJournalsComponent, canActivate: [AdminGuard] },
+  { path: 'admin/journals', component: AdminJournalsComponent, canActivate: [AdminGuard] },
   { path: 'admin/users', component: AdminRegistrationsComponent, canActivate: [AdminGuard] },
   { path: 'admin/register/urednik', component: UrednikRegisterComponent, canActivate: [AdminGuard] },
   { path: 'author/select/journal', component: AuthorSelectJournalComponent, canActivate: [AuthorGuard] },
   { path: 'input/paper/:processInstanceID', component: AuthorInputComponent, canActivate: [AuthorGuard] },
-  { path: 'pdf', component: ShowPdfComponent, canActivate: [AuthorGuard] },
-	{ path: 'register', component: RegistrationComponent },
+  //{ path: 'pdf', component: ShowPdfComponent, canActivate: [AuthorGuard] },
+  { path: 'register', component: RegistrationComponent },
   { path: 'tasks', component: UserTasksComponent },
   { path: 'task/:taskID', component: ActiveTaskComponent },
-	{ path: 'login', component: LoginComponent },
-	{ path: '**', redirectTo: '' }
+  { path: 'login', component: LoginComponent },
+  { path: 'advanced/search', component: AdvancedSearchComponent, canActivate: [UserGuard]},
+  { path: 'search/:searchby/:query', component: SearchResultComponentComponent, canActivate: [UserGuard]},
+  { path: 'showpdf/:pdfpath', component: ShowPdfComponent, canActivate: [UserGuard]},
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({

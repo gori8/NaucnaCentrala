@@ -1,0 +1,56 @@
+<div class="container">
+  <div class="row">
+    <div class="col sm-4">
+      <div class="row mt-5">
+        <div class="col sm-12">
+          <div >
+
+
+
+            <div class="container">
+              <div class="row">
+                <div class="col-md-8 left-side-sidebar">
+                  <div class="row text-center">
+                    <div class="col-md-12">
+                      <div class="v-heading-v2">
+                        <h4 class="v-search-result-count">About 18,580 results</h4>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="clearfix mt-40">
+                    <ul class="xsearch-items">
+                      <li class="search-item" *ngFor="let result of results">
+                        <div class="search-item-img">
+                          <a href="#">
+                            <img src="assets/img/paper.png" width="70" height="70">
+                          </a>
+                        </div>
+                        <div class="search-item-content">
+                          <h3 class="search-item-caption"><a [routerLink]="'/showpdf/'+result.filepath">{{result.naslov}}</a></h3>
+
+                          <div class="search-item-meta mb-15">
+                            <ul class="list-inline">
+                              <li >Naučna oblast: {{result.naucnaOblast}}</li>
+                              <li >Autori: {{result.autori}}</li>
+                            </ul>
+                          </div>
+                          <div *ngFor="let sazetak of result.dynamicHighlights">
+                            <div class="dynamic-highlights" [innerHTML]="sazetak.sazetak"></div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+

@@ -22,12 +22,8 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.naucnacentrala.dto.CasopisPV;
 import rs.ac.uns.naucnacentrala.elasticsearch.model.ESPaper;
 import rs.ac.uns.naucnacentrala.elasticsearch.repository.ESPaperRepository;
-import rs.ac.uns.naucnacentrala.model.Casopis;
-import rs.ac.uns.naucnacentrala.model.Paper;
-import rs.ac.uns.naucnacentrala.model.User;
-import rs.ac.uns.naucnacentrala.repository.CasopisRepository;
-import rs.ac.uns.naucnacentrala.repository.PaperRepository;
-import rs.ac.uns.naucnacentrala.repository.UserRepository;
+import rs.ac.uns.naucnacentrala.model.*;
+import rs.ac.uns.naucnacentrala.repository.*;
 import rs.ac.uns.naucnacentrala.service.PaymentService;
 import rs.ac.uns.naucnacentrala.utils.uploadingfiles.storage.StorageService;
 
@@ -49,17 +45,38 @@ public class PaperIndexing implements JavaDelegate {
     @Autowired
     ESPaperRepository esPaperRepository;
 
+    @Autowired
+    NaucnaOblastRepository naucnaOblastRepository;
+
+    @Autowired
+    CoauthorRepository coauthorRepository;
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         Long paperId = (Long)execution.getVariable("paperId");
         Paper paper = paperRepository.getOne(paperId);
 
-
         ESPaper esPaper = new ESPaper();
         esPaper.setApstrakt(paper.getApstrakt());
         esPaper.setKljucniPojmovi(paper.getKljucniPojmovi());
         esPaper.setNaslov(paper.getNaslov());
+        esPaper.setId(paperId);
+        esPaper.setFilename(paper.getPdfPath());
+
+        NaucnaOblast naucnaOblast = naucnaOblastRepository.getOne(paper.getNaucnaOblastId());
+
+        esPaper.setNaucnaOblast(naucnaOblast.getName());
+
+        User author = userRepository.findByUsername(paper.getAuthorUsername());
+
+        String autori = author.getIme()+" "+author.getPrezime()+",";
+        for (Coauthor koautor : coauthorRepository.findAllByPaperId(paper.getId())){
+            autori+=koautor.getIme()+" "+koautor.getPrezime()+",";
+        }
+
+        autori = removeLastChar(autori);
+
+        esPaper.setAutori(autori);
 
         //Get text from pdf
         File f = storageService.loadAsResource(paper.getPdfPath()).getFile();
@@ -70,13 +87,15 @@ public class PaperIndexing implements JavaDelegate {
         parsedText = parsedText.replace("\n"," ");
 
 
-
-
         esPaper.setSadrzaj(parsedText);
 
         esPaperRepository.save(esPaper);
         
 
+    }
+
+    private String removeLastChar(String str) {
+        return str.substring(0, str.length() - 1);
     }
 
 }

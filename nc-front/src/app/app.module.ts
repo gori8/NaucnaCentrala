@@ -27,6 +27,11 @@ import { ShowPdfComponent } from './show-pdf/show-pdf.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { ActiveTaskComponent } from './active-task/active-task.component';
 import { UserTasksComponent } from './user-tasks/user-tasks.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatIconModule } from '@angular/material/icon';
+import { AdvancedSearchComponent } from './advanced-search/advanced-search.component';
+import { SearchResultComponentComponent } from './search-result-component/search-result-component.component';
+
 
 
 
@@ -51,7 +56,9 @@ import { UserTasksComponent } from './user-tasks/user-tasks.component';
     AuthorInputComponent,
     ShowPdfComponent,
     ActiveTaskComponent,
-    UserTasksComponent
+    UserTasksComponent,
+    AdvancedSearchComponent,
+    SearchResultComponentComponent
   ],
   imports: [
     BrowserModule,
@@ -63,7 +70,9 @@ import { UserTasksComponent } from './user-tasks/user-tasks.component';
     NotifierModule,
     NgbModule,
     FileUploadModule,
-    NgxExtendedPdfViewerModule
+    NgxExtendedPdfViewerModule,
+    BrowserAnimationsModule,
+    MatIconModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

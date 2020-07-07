@@ -96,4 +96,16 @@ cursor: pointer;
 
 }
 
+input.search {
+  padding-left:40px;
+  background-repeat: no-repeat;
+  background-position-y: 5px;
+  background-position-x: 5px;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAABsUlEQVRIidWUv25TMRSHv2MlsXTV0I0XIPAEiBn2IlTEC5DFvkOlsvBngRIWKiSKVCF7gp1KUAhvAfQBUHkCGAoiYkikw1BHROm9+Kbt0t9kWf6d75zjY8NZl1RthhDOi8gasAJcTNtfVfWjtXa73+9/PzYgxngLeAV0azy/gNve+7dNAKYi+JsUfNcYc7UoiqWiKJZU9RrwHjgH7IQQVheqILVlH+iKyF3n3LMqQ4zxHvAU+CkiPefcj0YVpJ53gd264ADe+01gCCyr6lqugtkWXQcwxrzImURka9bTFHABYDwef8mZWq3W57TsLQLQ3OGpRqNR5XjnAN8AjDGXc6Z2uz09s98YoKpDABFZz5lE5E7yfGgMsNZuc/iIbqRRrFSM8QGHL/zAWvsym8yc+Sawk8BDEdmaTCafAIwxV1LmK6mKh865JwsBAEIIqyLyGliu8RyIyHNVHQCo6uOyLDfqAGZ+oyzLdyLSAwbAHvAbGKX1oNPpXJrNXEQehRBqAY3HbV4zX8ZUm977+6cGaAo5EaAJ5MSAHOTIJR9H6Yf9l7XIn9OIe0QhhI3/TdTZ1F+wxosqcdwjUQAAAABJRU5ErkJggg==);
+}
+
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 

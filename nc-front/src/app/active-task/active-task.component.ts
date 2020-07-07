@@ -95,7 +95,7 @@ export class ActiveTaskComponent implements OnInit {
                     for(let key of Array.from(map.keys())){
                       var item={item_id:"",item_text:""};
                       item.item_id=key;
-                      item.item_text=map.get(key);
+                      item.item_text=map.get(key) as string;
                       console.log(item);
                       this.multiselectList[field.id].push(item);
                       let selVals=field.value.value;

@@ -35,4 +35,7 @@ public class Paper {
     @ManyToOne(fetch = FetchType.EAGER)
     private Casopis casopis;
 
+    private String authorUsername;
+
+
 }
